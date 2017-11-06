@@ -20,8 +20,24 @@ have to be cast as a byte to stop them being misinterperted as NULL */
 #define ENCODERTWO 0x06 // Byte to read motor encoder 2
 #define VOLTREAD 0x0A // Byte to read battery volts
 #define RESETENCODERS 0x20
+#define MODE_SELECTOR 0xF // Byte to change between control MODES
 
-MD25::MD25() {} // constructor, nothing to construct
+MD25::MD25(int mode) { // consturctor, mode of MD25 operation
+	_mode = mode;
+}
+
+void MD25::setup() {
+	Wire.begin(); // Begin I2C bus
+	// Serial.begin(9600); // Begin serial
+	delay(100); // Wait for everything to power up
+
+	Wire.beginTransmission(MD25ADDRESS); // Set MD25 operation MODE
+	Wire.write(MODE_SELECTOR);
+	Wire.write(_mode);                                           
+	Wire.endTransmission();
+
+	encodeReset(); // Cals a function that resets the encoder values to 0 
+}
 
 void MD25::forward(int speed, int encoderCount=360) { // 360 is one revolution
 	do { // Start loop to drive motors forward
