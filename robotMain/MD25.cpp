@@ -21,11 +21,9 @@ have to be cast as a byte to stop them being misinterperted as NULL */
 #define VOLTREAD 0x0A // Byte to read battery volts
 #define RESETENCODERS 0x20
 
-MD25::MD25() { // constructor
-	// nothing to construct
-}
+MD25::MD25() {} // constructor, nothing to construct
 
-void MD25::forward(int speed, int encoderCount==360) { // 360 is one revolution
+void MD25::forward(int speed, int encoderCount=360) { // 360 is one revolution
 	do { // Start loop to drive motors forward
 		Wire.beginTransmission(MD25ADDRESS); // Drive motor 2 at speed value stored in speed
 		Wire.write(SPEED2);
@@ -95,8 +93,7 @@ long MD25::encoder2() { // Function to read value of encoder 2 as a long
 	Wire.endTransmission();
 
 	Wire.requestFrom(MD25ADDRESS, 4); // Request 4 bytes from MD25
-	while(Wire.available() < 4); // Wait for 4 bytes to become
-	available
+	while(Wire.available() < 4); // Wait for 4 bytes to become available
 	long poss2 = Wire.read();
 	poss2 <<= 8;
 	poss2 += Wire.read();

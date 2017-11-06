@@ -8,6 +8,9 @@
 
 #include <Arduino.h>
 
+#include <SoftwareSerial.h>
+#include <Wire.h>
+
 class MD25 {
 public:
 	MD25(); // constructor
