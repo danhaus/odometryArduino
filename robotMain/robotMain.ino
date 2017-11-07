@@ -21,7 +21,7 @@ MD25 md(2);
 void setup() {
   Serial.begin(9600); // start serial commuication
   md.setup();
-//  led.blink(1000);
+  led.blink(1000);
   md.encodeReset(); // reset encoders
 //  md.simpleForward(100, 100);
   delay(200);
@@ -30,7 +30,7 @@ void setup() {
 
 void loop() {
 //  Serial.println("reading encoder 1");
-  md.simpleForward(-50, -50);
+  md.simpleForward(50, 50);
   int encodeVal1 = md.encoder1();
   Serial.print("encoder1: ");
   Serial.print(encodeVal1, DEC);
