@@ -5,6 +5,7 @@
 #include "LED.h"
 #include "MD25.h"
 #include "driver.h"
+#include <Servo.h>
 
 #define MD25ADDRESS         0x58                              // Address of the MD25
 #define SPEED1              0x00                              // Byte to send speed to both motors for forward and backwards motion if operated in MODE 2 or 3 and Motor 1 Speed if in MODE 0 or 1
@@ -15,24 +16,48 @@
 #define CMD                 0x10                              // Byte to reset encoder values
 #define MODE_SELECTOR       0xF                               // Byte to change between control MODES
 
+#define servo_pin 9;
+#define led_pin 13;
+
 // create objects
-LED led(13);
-MD25 md(2);
+LED led(led_pin);
+MD25 md(0);
 Driver driver(0, 0, 0, 100, 200);
+Servo servo;
+
+int cor = 15;
 
 void setup() {
   Serial.begin(9600); // start serial commuication
   md.setup();
-  led.blink(1000);
+//  led.blink(1000);
   md.encodeReset(); // reset encoders
 //  md.setSpeed(100, 100);
   delay(200);
+  servo.attach(servo_pin);
   Serial.println("set up done");
 }
 
 void loop() {
+  int t = 0;
 //  Serial.println("reading encoder 1");
-  md.setSpeed(50, 50);
+  led.blink(400);
+  do{
+    md.setSpeed(0+cor, 0+cor);
+    delay(500);
+    t += 500;
+  } while (t <= 5000);
+  md.setSpeed(128, 128);
+  delay(500);
+  t = 0;
+  do{
+    md.setSpeed(255-cor, 255-cor);
+    delay(500);
+    t += 500;
+  } while (t <= 5000);
+  md.setSpeed(128, 128);
+  delay(500);
+
   int encodeVal1 = md.encoder1();
   Serial.print("encoder1: ");
   Serial.print(encodeVal1, DEC);
