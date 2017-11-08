@@ -54,7 +54,7 @@ void MD25::forward(int speed, int encoderCount=360) { // 360 is one revolution
 	stopMotors();
 }
 
-void MD25::simpleForward(int speed1, int speed2) {
+void MD25::setSpeed(int speed1, int speed2) {
 	Wire.beginTransmission(MD25ADDRESS); // Drive motor 1 at speed value stored in speed1
 	Wire.write(SPEED1);
 	Wire.write(speed1);

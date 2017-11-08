@@ -18,7 +18,7 @@ public:
 	void setup(); // setups I2C and mode of MD22
 	void forward(int speed, int encoderCount); /* drives both motors forward with set speed until encoders
 	do not reach the specified number of pulses (360 pulese per revolution), then it stops */
-	void simpleForward(int speed1, int speed2); /* send command to drive both motors with the set speeds,
+	void setSpeed(int speed1, int speed2); /* send command to drive both motors with the set speeds,
 	needs to be enclosed in while loop to drive constantly, otherwise it stops within 2 seconds */
 	void stopMotors(); // stops both motors
 	void encodeReset(); // resets both endocedrs
