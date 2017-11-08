@@ -16,8 +16,8 @@
 #define CMD                 0x10                              // Byte to reset encoder values
 #define MODE_SELECTOR       0xF                               // Byte to change between control MODES
 
-#define servo_pin 9;
-#define led_pin 13;
+#define servo_pin 9
+#define led_pin 13
 
 // create objects
 LED led(led_pin);
