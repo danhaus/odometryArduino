@@ -15,9 +15,9 @@ public:
 	int encoder1;
 	int encoder2;
 private:
-	float p;
-	float i;
-	float d;
+	float Kp;
+	float Ki;
+	float Kd;
 	int cir; // circumference of the wheel [mm]
 	int wDist; // distance between wheels [mm]
 };

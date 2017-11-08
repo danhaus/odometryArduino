@@ -7,9 +7,9 @@
 #include "driver.h" //include the declaration for this class
 
 Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheelDist) { // constructor, PID constants
-	p = Pp;
-	i = Pi;
-	d = Pd;
+	Kp = Pp;
+	Ki = Pi;
+	Kd = Pd;
 	cir = circumference;
 	wDist = wheelDist;
 }
