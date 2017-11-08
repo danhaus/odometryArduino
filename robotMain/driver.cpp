@@ -6,24 +6,16 @@
 
 #include "driver.h" //include the declaration for this class
 
-Driver::Driver(float p, float i, float d){ // constructor, PID constants
-	
+Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheelDist) { // constructor, PID constants
+	p = Pp;
+	i = Pi;
+	d = Pd;
+	cir = circumference;
+	wDist = wheelDist;
 }
 
-//turn the LED on
-void LED::on(){
-	digitalWrite(_pin,HIGH); //set the pin HIGH and thus turn LED on
+int Driver:getEncVal(int dist) { // returns encoder value to be set to drive required distance
+	int encCount = ((dist/cir) * 360);
+	return encCount;
 }
 
-//turn the LED off
-void LED::off(){
-	digitalWrite(_pin,LOW); //set the pin LOW and thus turn LED off
-}
-
-//blink the LED in a period equal to paramterer time.
-void LED::blink(int time){
-	on(); 			//turn LED on
-	delay(time/2);  //wait half of the wanted period
-	off();			//turn LED off
-	delay(time/2);  //wait the last half of the wanted period
-}

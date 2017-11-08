@@ -11,10 +11,15 @@
 class Driver {
 public:
 	Driver(); // constructor
-	void on(); // switch on
-	void off(); // switch off
-	void blink(int time); // blink with period of time
+	void getEncVal(int dist);
+	int encoder1;
+	int encoder2;
 private:
+	float p;
+	float i;
+	float d;
+	int cir; // circumference of the wheel
+	int wDist; // distance between wheels
 };
 
 #endif
