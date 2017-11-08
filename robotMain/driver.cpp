@@ -14,7 +14,7 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheelDist) {
 	wDist = wheelDist;
 }
 
-int Driver:getEncVal(int dist) { // returns encoder value to be set to drive required distance
+int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
 	int encCount = ((dist/cir) * 360);
 	return encCount;
 }

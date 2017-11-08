@@ -4,6 +4,7 @@
 
 #include "LED.h"
 #include "MD25.h"
+#include "driver.h"
 
 #define MD25ADDRESS         0x58                              // Address of the MD25
 #define SPEED1              0x00                              // Byte to send speed to both motors for forward and backwards motion if operated in MODE 2 or 3 and Motor 1 Speed if in MODE 0 or 1
@@ -17,6 +18,7 @@
 // create objects
 LED led(13);
 MD25 md(2);
+Driver driver(0, 0, 0, 100, 200);
 
 void setup() {
   Serial.begin(9600); // start serial commuication

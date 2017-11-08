@@ -10,16 +10,16 @@
 
 class Driver {
 public:
-	Driver(); // constructor
-	void getEncVal(int dist);
+	Driver(float Pp, float Pi, float Pd, int circumference, int wheelDist); // constructor
+	int getEncVal(int dist);
 	int encoder1;
 	int encoder2;
 private:
 	float p;
 	float i;
 	float d;
-	int cir; // circumference of the wheel
-	int wDist; // distance between wheels
+	int cir; // circumference of the wheel [mm]
+	int wDist; // distance between wheels [mm]
 };
 
 #endif
