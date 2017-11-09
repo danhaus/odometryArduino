@@ -46,3 +46,17 @@ void Driver::forward(int dist) {
 	md->encReset();
 }
 
+void Driver::printPid() {
+	Serial.print("error: ");
+	Serial.println(error);
+	Serial.print("P: ");
+	Serial.println(P);
+	Serial.print("I: ");
+	Serial.println(I);
+	Serial.print("D: ");
+	Serial.println(D);
+	Serial.print("PID_value: ");
+	Serial.println(PID_value);
+	Serial.println();
+}
+

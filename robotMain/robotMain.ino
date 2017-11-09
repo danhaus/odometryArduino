@@ -40,56 +40,15 @@ void setup() {
 
 void loop() {
   driver.calculatePid(10, 1000);
-  Serial.print("P: ");
-  Serial.println(driver.P);
-  Serial.print("I: ");
-  Serial.println(driver.I);
-  Serial.print("D: ");
-  Serial.println(driver.D);
-  Serial.println(driver.PID_value);
-  Serial.println();
-  delay(1000);
+  driver.printPid();
   driver.calculatePid(100, 1000);
-  Serial.print("P: ");
-  Serial.println(driver.P);
-  Serial.print("I: ");
-  Serial.println(driver.I);
-  Serial.print("D: ");
-  Serial.println(driver.D);
-  Serial.println(driver.PID_value);
-  Serial.println();
-  delay(1000);
+  driver.printPid();
   driver.calculatePid(500, 1000);
-  Serial.print("P: ");
-  Serial.println(driver.P);
-  Serial.print("I: ");
-  Serial.println(driver.I);
-  Serial.print("D: ");
-  Serial.println(driver.D);
-  Serial.println(driver.PID_value);
-  Serial.println();
-  delay(1000);
+  driver.printPid();
   driver.calculatePid(900, 1000);
-  Serial.print("P: ");
-  Serial.println(driver.P);
-  Serial.print("I: ");
-  Serial.println(driver.I);
-  Serial.print("D: ");
-  Serial.println(driver.D);
-  Serial.println(driver.PID_value);
-  Serial.println();
-  delay(1000);
+  driver.printPid();
   driver.calculatePid(1100, 1000);
-  Serial.print("P: ");
-  Serial.println(driver.P);
-  Serial.print("I: ");
-  Serial.println(driver.I);
-  Serial.print("D: ");
-  Serial.println(driver.D);
-  Serial.println(driver.PID_value);
-  Serial.println();
-  delay(1000);
-
+  driver.printPid();
   while(true);
 
 
