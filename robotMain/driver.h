@@ -12,13 +12,16 @@
 
 class Driver {
 public:
-	Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction=15); // constructor
+	Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction=15, unsigned int timePeriod=50); // constructor
+	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
+	timePeriod[ms]: period in between readings of error for terminating PID */
 	int getEncVal(int dist);
 	int getSpeed(int speed); /* inputs speed from pid, if it is outside the limit
 	[0+limit_correction, 255-limit_correction], returns the limit value, otherwise it returns the speed */
 	void calculatePid(int enc_val_cur, int target_val); // calculates PID values
 	void forward(int dist); // drives forward using PID and functions above
 	void printPid(); // prints current PID values and error
+	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
 
 private:
 	float Kp;
@@ -36,6 +39,9 @@ private:
 	int cir; // circumference of the wheel [mm]
 	int w_dist; // distance between wheels [mm]
 	MD25* md;
+	unsigned long cur_time;
+	unsigned long prev_time;
+	unsigned int period;
 };
 
 #endif

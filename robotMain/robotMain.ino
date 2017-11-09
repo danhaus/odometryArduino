@@ -1,7 +1,6 @@
 /* This code..
  * 
  */
-
 #include "LED.h"
 #include "MD25.h"
 #include "driver.h"
@@ -50,7 +49,6 @@ void loop() {
   driver.calculatePid(1100, 1000);
   driver.printPid();
   while(true);
-
 
 
 

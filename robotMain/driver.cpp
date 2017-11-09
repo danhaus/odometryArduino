@@ -9,7 +9,7 @@
 #include "MD25.h"
 
 
-Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction) { // constructor, PID constants
+Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction, unsigned int timePeriod) { // constructor, PID constants
 	Kp = Pp;
 	Ki = Pi;
 	Kd = Pd;
@@ -19,6 +19,7 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, 
 	error = 0;
 	previous_error = 0;
 	md = new MD25(0); // 0 is for mode 0 of MD25 and code is writ
+	period = timePeriod;
 }
 
 int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
@@ -38,9 +39,9 @@ int Driver::getSpeed(int speed) {
 
 void Driver::calculatePid(int enc_val_cur, int target_val) {
 	error = target_val - enc_val_cur;
-	P = error;
-	I = I + error;
-	D = error - previous_error;
+	P = error; // proportional
+	I = I + error; // integral
+	D = error - previous_error; // derivative
 	PID_val = ((Kp*P) + (Ki*I) + (Kd*D))/100; // not sure about the sign after 128
 	PID_speed_theor = 128 +  PID_val;
 	PID_speed_limited = getSpeed(PID_speed_theor);
@@ -48,9 +49,12 @@ void Driver::calculatePid(int enc_val_cur, int target_val) {
 
 void Driver::forward(int dist) {
 	md->encReset(); // reset encoders
-	int enc_target = getEncVal(dist); // get target value for encoders
-	int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
-	calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
+	do {
+		int enc_target = getEncVal(dist); // get target value for encoders
+		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
+		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
+		md->setSpeed(PID_speed_limited, PID_speed_limited);
+	} while(true);
 }
 
 void Driver::printPid() {
@@ -67,5 +71,14 @@ void Driver::printPid() {
 	Serial.print("PID_speed_limited: ");
 	Serial.println(PID_speed_limited);
 	Serial.println();
+}
+
+bool Driver::readingPeriod() {
+	cur_time = millis();
+	if (cur_time > (prev_time + period)) {
+		prev_time = cur_time;
+		return true;
+	}
+	return false;
 }
 
