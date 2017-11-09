@@ -21,7 +21,7 @@ public:
 	void setSpeed(int speed1, int speed2); /* send command to drive both motors with the set speeds,
 	needs to be enclosed in while loop to drive constantly, otherwise it stops within 2 seconds */
 	void stopMotors(); // stops both motors
-	void encodeReset(); // resets both endocedrs
+	void encReset(); // resets both endocedrs
 	long encoder1(); // returns value of encoder 1
 	long encoder2(); // returns value of encoder 2
 	int volts(); // returns battery voltage as a sum of ten readings

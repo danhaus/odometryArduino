@@ -31,7 +31,7 @@ void setup() {
   Serial.begin(9600); // start serial commuication
   md.setup();
 //  led.blink(1000);
-  md.encodeReset(); // reset encoders
+  md.encReset(); // reset encoders
 //  md.setSpeed(100, 100);
   delay(200);
   servo.attach(servo_pin);

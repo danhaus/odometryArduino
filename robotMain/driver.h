@@ -7,6 +7,8 @@
 #define Driver_H
 
 #include <Arduino.h>
+#include "MD25.h"
+
 
 class Driver {
 public:
@@ -14,7 +16,8 @@ public:
 	int getEncVal(int dist);
 	int getSpeed(int speed, int limit_correction=15); /* inputs speed from pid, if it is outside the limit
 	[0+limit_correction, 255-limit_correction], returns the limit value, otherwise it returns the speed */
-	void calculatePid(int enc_val, int target_val);
+	void calculatePid(int enc_val, int target_val); // calculates PID values
+	void forward(int dist); // drives forward using PID and functions above
 	int encoder1;
 	int encoder2;
 	int error; // error for PID
@@ -29,6 +32,7 @@ private:
 	float Kd;
 	int cir; // circumference of the wheel [mm]
 	int w_dist; // distance between wheels [mm]
+	MD25* md;
 };
 
 #endif

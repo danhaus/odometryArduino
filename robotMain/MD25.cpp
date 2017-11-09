@@ -36,7 +36,7 @@ void MD25::setup() {
 	Wire.write(_mode);                                           
 	Wire.endTransmission();
 
-	encodeReset(); // Cals a function that resets the encoder values to 0 
+	encReset(); // Cals a function that resets the encoder values to 0 
 }
 
 void MD25::forward(int speed, int encoderCount=360) { // 360 is one revolution
@@ -78,7 +78,7 @@ void MD25::stopMotors() { // Function to stop motors
 	Wire.endTransmission();
 } 
 
-void MD25::encodeReset() { // This function resets the encoder values to 0
+void MD25::encReset() { // This function resets the encoder values to 0
 	Wire.beginTransmission(MD25ADDRESS);
 	Wire.write(CMD);
 	Wire.write(0x20); // Putting the value 0x20 to reset encoders

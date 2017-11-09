@@ -8,7 +8,6 @@
 #include "MD25.h"
 
 
-
 Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist) { // constructor, PID constants
 	Kp = Pp;
 	Ki = Pi;
@@ -17,7 +16,7 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist) 
 	w_dist = wheel_dist;
 	error = 0;
 	previous_error = 0;
-	MD25 md(0);
+	md = new MD25(0);
 }
 
 int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
@@ -41,5 +40,9 @@ void Driver::calculatePid(int enc_val, int target_val) {
 	I = I + error;
 	D = error - previous_error;
 	PID_value = ((Kp*P) + (Ki*I) + (Kd*D))/100;
+}
+
+void Driver::forward(int dist) {
+	md->encReset();
 }
 
