@@ -9,7 +9,7 @@
 #include "MD25.h"
 
 
-Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction, unsigned int timePeriod) { // constructor, PID constants
+Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision) { // constructor, PID constants
 	Kp = Pp;
 	Ki = Pi;
 	Kd = Pd;
@@ -19,7 +19,8 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, 
 	error = 0;
 	previous_error = 0;
 	md = new MD25(0); // 0 is for mode 0 of MD25 and code is writ
-	period = timePeriod;
+	period = time_period;
+	pid_prec = pid_precision;
 }
 
 int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
@@ -49,12 +50,27 @@ void Driver::calculatePid(int enc_val_cur, int target_val) {
 
 void Driver::forward(int dist) {
 	md->encReset(); // reset encoders
+	int cumulated_error = 0;
+	int counter = 0;
 	do {
 		int enc_target = getEncVal(dist); // get target value for encoders
 		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
 		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
 		md->setSpeed(PID_speed_limited, PID_speed_limited);
-	} while(true);
+		if (readingPeriod()) {
+			cumulated_error += error;
+			counter++;
+			if (counter >= 10) {
+				if (cumulated_error < pid_prec) {
+					break;
+				}
+				else {
+					counter = 0;
+					cumulated_error = 0;
+				}
+			}
+		}
+	} while(false);
 }
 
 void Driver::printPid() {
