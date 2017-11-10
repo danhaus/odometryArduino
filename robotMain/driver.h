@@ -16,7 +16,7 @@
 
 class Driver {
 public:
-	Driver(int Pp, int Pi, int Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision); // constructor
+	Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision); // constructor
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void forward(int dist); // drives forward using PID and functions above
@@ -31,16 +31,16 @@ public:
 	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
 
 private:
-	int Kp;
-	int Ki;
-	int Kd;
+	float Kp;
+	float Ki;
+	float Kd;
 	int limit_cor;
 	int error; // error for PID (encoder count)
 	int previous_error;
 	int P; // proportional error for PID
 	int I; // integral of error for PID
 	int D; // differential of error for PID
-	int PID_val; // value for PID (it is devided by 100 so that it does not require type float)
+	float PID_val; // value for PID (it is devided by 100 so that it does not require type float)
 	int PID_speed_theor; // PID_speed = 128 + PID_val (automatically asigned in calculatePID())
 	int PID_speed_limited; // limited PID speed so that the motor does not exceeds min and max speeds, performed by getSpeed(..)
 	int cir; // circumference of the wheel [mm]

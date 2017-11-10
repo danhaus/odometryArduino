@@ -18,14 +18,14 @@
 #define servo_pin 9
 #define led_pin 13
 
-int Pp = 50;
-int Pi = 0;
-int Pd = 0;
+float Pp = 2;
+float Pi = 0;
+float Pd = 0;
 int circumference = 321; // [mm]
 int wheel_dist = 235; // [mm]
-int limit_correction = 15; // [encoder count]
-unsigned int time_period = 10; // [ms]
-int pid_precision = 100; // sum of ten errors for pid [encoder count]
+int limit_correction = 70; // [ms] (min value of 15)
+unsigned int time_period = 50; // [ms]
+int pid_precision = 10; // sum of ten errors for pid [encoder count]
 
 // create objects
 LED led(led_pin);
@@ -45,15 +45,21 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(driver.getEncVal(300));
-//  driver.forward(300);
-//  while(true);
+//  // DEBUGGING PID
+//  int target_value = driver.getEncVal(3000);
+//  int enc_cur = md.encoder1();
+//  Serial.print("target_value: ");
+//  Serial.println(target_value);
+//  Serial.print("enc_cur: ");
+//  Serial.println(enc_cur);
+//  driver.calculatePid(enc_cur, target_value);
+//  driver.printPid();
+//  int enc = md.encoder1();
+//  Serial.println("\n");
+//  delay(500);
 
-// // SPIN 10 TIMES
-//  md.printEnc();
-//  md.forward(80, -360*10 + 40);
-//  md.printEnc();
-//  while(true);
+  driver.forward(3000);
+  while(true);
 
 
 // // PID PRINTING
