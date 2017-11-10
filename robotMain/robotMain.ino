@@ -24,16 +24,14 @@ int Pd = 0;
 int circumference = 321; // [mm]
 int wheel_dist = 235; // [mm]
 int limit_correction = 15; // [encoder count]
-unsigned int time_period = 20; // [ms]
-int pid_precision = 50; // sum of ten errors for pid [encoder count]
+unsigned int time_period = 10; // [ms]
+int pid_precision = 100; // sum of ten errors for pid [encoder count]
 
 // create objects
 LED led(led_pin);
 MD25 md(0);
 Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
 Servo servo;
-
-int cor = 15;
 
 void setup() {
   Serial.begin(9600); // start serial commuication
@@ -47,14 +45,15 @@ void setup() {
 }
 
 void loop() {
+  Serial.println(driver.getEncVal(300));
+//  driver.forward(300);
+//  while(true);
 
- // SPIN 10 TIMES
-  md.printEnc();
-  md.forward(80, -360*10 + 40);
-  md.printEnc();
-  while(true);
-
-
+// // SPIN 10 TIMES
+//  md.printEnc();
+//  md.forward(80, -360*10 + 40);
+//  md.printEnc();
+//  while(true);
 
 
 // // PID PRINTING

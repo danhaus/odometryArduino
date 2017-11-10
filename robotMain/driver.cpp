@@ -29,6 +29,7 @@ void Driver::forward(int dist) {
 	int counter = 0;
 	do {
 		int enc_target = getEncVal(dist); // get target value for encoders
+		// Serial.println(enc_target);
 		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
 		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
 		md->setSpeed(PID_speed_limited, PID_speed_limited);
@@ -80,7 +81,7 @@ void Driver::printEnc() {
 // HELP FUNCTIONS
 
 int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
-	int enc_count = ((dist/cir) * 360);
+	int enc_count = int(((float(dist)/cir) * 360));
 	return enc_count;
 }
 
