@@ -12,21 +12,24 @@
 
 class Driver {
 public:
-	Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction=15, unsigned int time_period=20, int pid_precision=50); // constructor
+	Driver(int Pp, int Pi, int Pd, int circumference, int wheel_dist, int limit_correction=15, unsigned int time_period=20, int pid_precision=50); // constructor
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
+	void forward(int dist); // drives forward using PID and functions above
+	void printPid(); // prints current PID values and error
+	void printEnc(); // prints current ecoder values
+
+	// HELP FUNCTIONS
 	int getEncVal(int dist);
 	int getSpeed(int speed); /* inputs speed from pid, if it is outside the limit
 	[0+limit_correction, 255-limit_correction], returns the limit value, otherwise it returns the speed */
 	void calculatePid(int enc_val_cur, int target_val); // calculates PID values
-	void forward(int dist); // drives forward using PID and functions above
-	void printPid(); // prints current PID values and error
 	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
 
 private:
-	float Kp;
-	float Ki;
-	float Kd;
+	int Kp;
+	int Ki;
+	int Kd;
 	int limit_cor;
 	int error; // error for PID (encoder count)
 	int previous_error;

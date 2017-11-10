@@ -18,10 +18,16 @@
 #define servo_pin 9
 #define led_pin 13
 
+int Pp = 50;
+int Pi = 0;
+int Pd = 0;
+int circumference = 100; // [mm]
+int wheel_dist = 180; // [mm]
+
 // create objects
 LED led(led_pin);
 MD25 md(0);
-Driver driver(50, 0, 0, 100, 200);
+Driver driver(Pp, Pi, Pd, circumference, wheel_dist);
 Servo servo;
 
 int cor = 15;

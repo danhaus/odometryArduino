@@ -9,7 +9,7 @@
 #include "MD25.h"
 
 
-Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision) { // constructor, PID constants
+Driver::Driver(int Pp, int Pi, int Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision) { // constructor, PID constants
 	Kp = Pp;
 	Ki = Pi;
 	Kd = Pd;
@@ -21,31 +21,6 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, 
 	md = new MD25(0); // 0 is for mode 0 of MD25 and code is writ
 	period = time_period;
 	pid_prec = pid_precision;
-}
-
-int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
-	int enc_count = ((dist/cir) * 360);
-	return enc_count;
-}
-
-int Driver::getSpeed(int speed) {
-	if (speed >= 255 - limit_cor) {
-		return (255 - limit_cor);
-	}
-	if (speed <= 0 + limit_cor) {
-		return (0 + limit_cor);
-	}
-	return speed;
-}
-
-void Driver::calculatePid(int enc_val_cur, int target_val) {
-	error = target_val - enc_val_cur;
-	P = error; // proportional
-	I = I + error; // integral
-	D = error - previous_error; // derivative
-	PID_val = ((Kp*P) + (Ki*I) + (Kd*D))/100; // not sure about the sign after 128
-	PID_speed_theor = 128 +  PID_val;
-	PID_speed_limited = getSpeed(PID_speed_theor);
 }
 
 void Driver::forward(int dist) {
@@ -89,6 +64,45 @@ void Driver::printPid() {
 	Serial.println();
 }
 
+void Driver::printEnc() {
+	int encodeVal1 = md->encoder1();
+	Serial.print("encoder1: ");
+	Serial.print(encodeVal1, DEC);
+	Serial.print("\t");
+	int encodeVal2 = md->encoder2();
+	Serial.print("encoder2: ");
+	Serial.println(encodeVal2, DEC);
+	Serial.println();
+}
+
+
+
+// HELP FUNCTIONS
+
+int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
+	int enc_count = ((dist/cir) * 360);
+	return enc_count;
+}
+
+int Driver::getSpeed(int speed) {
+	if (speed >= 255 - limit_cor) {
+		return (255 - limit_cor);
+	}
+	if (speed <= 0 + limit_cor) {
+		return (0 + limit_cor);
+	}
+	return speed;
+}
+
+void Driver::calculatePid(int enc_val_cur, int target_val) {
+	error = target_val - enc_val_cur;
+	P = error; // proportional
+	I = I + error; // integral
+	D = error - previous_error; // derivative
+	PID_val = ((Kp*P) + (Ki*I) + (Kd*D))/100; // not sure about the sign after 128
+	PID_speed_theor = 128 +  PID_val;
+	PID_speed_limited = getSpeed(PID_speed_theor);
+}
 bool Driver::readingPeriod() {
 	cur_time = millis();
 	if (cur_time > (prev_time + period)) {
