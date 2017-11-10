@@ -38,25 +38,32 @@ void setup() {
 }
 
 void loop() {
-  driver.calculatePid(10, 1000);
-  driver.printPid();
-  driver.calculatePid(100, 1000);
-  driver.printPid();
-  driver.calculatePid(500, 1000);
-  driver.printPid();
-  driver.calculatePid(900, 1000);
-  driver.printPid();
-  driver.calculatePid(1100, 1000);
-  driver.printPid();
-  while(true);
 
 
 
 
 
-  
+
+
+// // PID PRINTING
+//  driver.calculatePid(10, 1000);
+//  driver.printPid();
+//  driver.calculatePid(100, 1000);
+//  driver.printPid();
+//  driver.calculatePid(500, 1000);
+//  driver.printPid();
+//  driver.calculatePid(900, 1000);
+//  driver.printPid();
+//  driver.calculatePid(1100, 1000);
+//  driver.printPid();
+//  while(true);
+
+
+
+
+
+//// FIRST TEST
 //  int t = 0;
-////  Serial.println("reading encoder 1");
 //  led.blink(400);
 //  do{
 //    md.setSpeed(0+cor, 0+cor);
@@ -78,10 +85,11 @@ void loop() {
 //  Serial.print("encoder1: ");
 //  Serial.print(encodeVal1, DEC);
 //  Serial.print("\t");
-////  Serial.println("reading encoder 2");
 //  int encodeVal2 = md.encoder2();
 //  Serial.print("encoder2: ");
 //  Serial.println(encodeVal2, DEC);
 //  delay(3000);
-//  md.encodeReset();
+//  md.encReset();
+
+
 }

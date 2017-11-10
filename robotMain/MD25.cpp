@@ -133,3 +133,14 @@ int MD25::volts() { // Function to read battery volts as a single byte
 	return (batteryVolts); // sum of ten readings
 }
 
+void MD25::printEnc() {
+	int encodeVal1 = encoder1();
+	Serial.print("encoder1: ");
+	Serial.print(encodeVal1, DEC);
+	Serial.print("\t");
+	int encodeVal2 = encoder2();
+	Serial.print("encoder2: ");
+	Serial.println(encodeVal2, DEC);
+	Serial.println();
+}
+

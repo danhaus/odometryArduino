@@ -25,6 +25,7 @@ public:
 	long encoder1(); // returns value of encoder 1
 	long encoder2(); // returns value of encoder 2
 	int volts(); // returns battery voltage as a sum of ten readings
+	void printEnc(); // reads and prints encoder values
 private:
 	int _mode;
 };
