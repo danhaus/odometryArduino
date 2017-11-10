@@ -70,7 +70,7 @@ void Driver::forward(int dist) {
 				}
 			}
 		}
-	} while(false);
+	} while(true);
 }
 
 void Driver::printPid() {
@@ -97,4 +97,6 @@ bool Driver::readingPeriod() {
 	}
 	return false;
 }
+
+// 
 

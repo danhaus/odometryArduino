@@ -21,7 +21,7 @@
 // create objects
 LED led(led_pin);
 MD25 md(0);
-Driver driver(5, 0, 1, 100, 200);
+Driver driver(50, 0, 0, 100, 200);
 Servo servo;
 
 int cor = 15;
