@@ -21,13 +21,16 @@
 int Pp = 50;
 int Pi = 0;
 int Pd = 0;
-int circumference = 100; // [mm]
-int wheel_dist = 180; // [mm]
+int circumference = 321; // [mm]
+int wheel_dist = 235; // [mm]
+int limit_correction = 15; // [encoder count]
+unsigned int time_period = 20; // [ms]
+int pid_precision = 50; // sum of ten errors for pid [encoder count]
 
 // create objects
 LED led(led_pin);
 MD25 md(0);
-Driver driver(Pp, Pi, Pd, circumference, wheel_dist);
+Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
 Servo servo;
 
 int cor = 15;
@@ -45,8 +48,11 @@ void setup() {
 
 void loop() {
 
-
-
+ // SPIN 10 TIMES
+  md.printEnc();
+  md.forward(80, -360*10 + 40);
+  md.printEnc();
+  while(true);
 
 
 

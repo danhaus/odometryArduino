@@ -3,6 +3,10 @@
  * dh4n16@soton.ac.uk
  */
 
+/*	10*circumference = 3213 mm
+	distance between wheels = 235 mm
+*/
+
 #ifndef Driver_H
 #define Driver_H
 
@@ -12,7 +16,7 @@
 
 class Driver {
 public:
-	Driver(int Pp, int Pi, int Pd, int circumference, int wheel_dist, int limit_correction=15, unsigned int time_period=20, int pid_precision=50); // constructor
+	Driver(int Pp, int Pi, int Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision); // constructor
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void forward(int dist); // drives forward using PID and functions above

@@ -50,7 +50,7 @@ void MD25::forward(int speed, int encoderCount=360) { // 360 is one revolution
 		Wire.write(SPEED1);
 		Wire.write(speed);
 		Wire.endTransmission();
-	} while(encoder1() < encoderCount);
+	} while(abs(encoder1()) < abs(encoderCount));
 	stopMotors();
 }
 
