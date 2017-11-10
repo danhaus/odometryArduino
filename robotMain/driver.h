@@ -29,6 +29,7 @@ public:
 	[0+limit_correction, 255-limit_correction], returns the limit value, otherwise it returns the speed */
 	void calculatePid(int enc_val_cur, int target_val); // calculates PID values
 	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
+	bool terminatePid(); // help function for terminating pid
 
 private:
 	float Kp;
@@ -50,6 +51,8 @@ private:
 	unsigned long prev_time;
 	unsigned int period;
 	int pid_prec; // if sum of 10 encoder reading is smaller than pid_prec, forward(..) terminates
+	int counter;
+	int cumulated_error;
 };
 
 #endif

@@ -21,30 +21,17 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, 
 	md = new MD25(0); // 0 is for mode 0 of MD25 and code is writ
 	period = time_period;
 	pid_prec = pid_precision;
+	counter = 0; // counter for forward()
+	cumulated_error = 0; // cumulated error for terminating the forward()
 }
 
 void Driver::forward(int dist) {
 	md->encReset(); // reset encoders
-	int cumulated_error = 0;
-	int counter = 0;
 	do {
 		int enc_target = getEncVal(dist); // get target value for encoders
 		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
 		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
 		md->setSpeed(PID_speed_limited, PID_speed_limited);
-		 if (readingPeriod()) {
-		 	cumulated_error += error;
-		 	counter++;
-		 	if (counter >= 10) {
-		 		if (cumulated_error < pid_prec) {
-		 			break;
-		 		}
-		 		else {
-		 			counter = 0;
-		 			cumulated_error = 0;
-		 		}
-		 	}
-		 }
 	} while(true);
 }
 
@@ -113,6 +100,21 @@ bool Driver::readingPeriod() {
 		return true;
 	}
 	return false;
+}
+
+bool Driver::terminatePid() {
+	cumulated_error += error;
+	counter++;
+	if (counter >= 10) {
+		if (cumulated_error < pid_prec) {
+			return true;
+		}
+		else {
+			counter = 0;
+			cumulated_error = 0;
+		}
+	}
+	return false;	 
 }
 
 // 
