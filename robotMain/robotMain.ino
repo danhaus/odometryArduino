@@ -18,7 +18,7 @@
 #define servo_pin 9
 #define led_pin 13
 
-float Pp = 2;
+float Pp = 0.4;
 float Pi = 0;
 float Pd = 0;
 int circumference = 321; // [mm]
@@ -58,7 +58,7 @@ void loop() {
 //  Serial.println("\n");
 //  delay(500);
 
-  driver.forward(3000);
+  driver.forward(355);
   while(true);
 
 
