@@ -21,6 +21,7 @@ public:
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void forward(int dist); // drives forward using PID and functions above
 	void turnAtSpot(int angle); // turns at spot until it reaches required angle (positive anti-clockwise)
+	void turn(int rad, int angle, char side);
 	void printPid(); // prints current PID values and error
 	void printEnc(); // prints current ecoder values
 

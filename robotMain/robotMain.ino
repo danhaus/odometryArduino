@@ -17,6 +17,7 @@
 
 #define servo_pin 9
 #define led_pin 13
+#define led_battery_pin 10
 
 float Pp = 0.4;
 float Pi = 0;
@@ -29,6 +30,7 @@ int pid_precision = 10; // sum of ten errors for pid [encoder count]
 
 // create objects
 LED led(led_pin);
+LED led_battery(led_battery_pin);
 MD25 md(0);
 Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
 Servo servo;
@@ -42,6 +44,10 @@ void setup() {
   delay(200);
   servo.attach(servo_pin);
   Serial.println("set up done");
+  if (md.voltage() < 13) {
+    led_battery.on();
+    while (true);
+  }
 }
 
 void loop() {

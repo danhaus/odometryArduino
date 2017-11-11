@@ -38,7 +38,8 @@ void Driver::forward(int dist) {
 
 void Driver::turnAtSpot(int angle) {
 	md->encReset(); // reset encoders
-	int dist = int((float(angle)/360) * (pi*wheel_dist));
+	int arc = int((float(angle)/360) * (pi*wheel_dist));
+	int dist = arc;
 	do {
 		int enc_target = getEncVal(dist); // get target value for encoders
 		int enc1 = md->encoder1();
@@ -52,7 +53,30 @@ void Driver::turnAtSpot(int angle) {
 void Driver::turn(int rad, int angle, char side) {
 	float arc_portion = (float(angle)/360);
 	int arc = int ((float(rad) + (float(wheel_dist)/2)) * arc_portion); // length of outer arc
-	float speed_ratio = (float(rad) - (float(wheel_dist)/2) / (float(rad) + float(wheel_dist)/2);
+	float speed_ratio = float(rad) - (float(wheel_dist)/2) / (float(rad) + float(wheel_dist)/2);
+	int dist = arc;
+	typedef void (*encoder) ();
+	if (side == 'L') {
+		encoder = md->encoder2;
+	}
+	else {
+		encoder = md->encoder1;
+	}
+	do {
+		int enc_target = getEncVal(dist); // get target value for encoders
+		int enc = encoder();
+		calculatePid(enc, enc_target);
+		if (side == 'L') {
+
+			int spd1 = round((PID_speed_limited) * speed_ratio);
+			int spd2 = PID_speed_limited();
+		}
+		else {
+			int spd1 = PID_speed_limited;
+			int spd2 = round((PID_speed_limited) * speed_ratio);
+		}
+		md->setSpeed(sdp1, spd2);
+	}
 }
 
 void Driver::printPid() {
