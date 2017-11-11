@@ -49,6 +49,12 @@ void Driver::turnAtSpot(int angle) {
 	} while(true);
 }
 
+void Driver::turn(int rad, int angle, char side) {
+	float arc_portion = (float(angle)/360);
+	int arc = int ((float(rad) + (float(wheel_dist)/2)) * arc_portion); // length of outer arc
+	float speed_ratio = (float(rad) - (float(wheel_dist)/2) / (float(rad) + float(wheel_dist)/2);
+}
+
 void Driver::printPid() {
 	Serial.print("error: ");
 	Serial.println(error);
