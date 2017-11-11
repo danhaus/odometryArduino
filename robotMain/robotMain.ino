@@ -44,7 +44,7 @@ void setup() {
   delay(200);
   servo.attach(servo_pin);
   Serial.println("set up done");
-  if (md.voltage() < 13) {
+  if (md.volts() < 13) {
     led_battery.on();
     while (true);
   }
