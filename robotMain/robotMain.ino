@@ -5,6 +5,7 @@
 #include "MD25.h"
 #include "driver.h"
 #include <Servo.h>
+#include "button.h"
 
 #define MD25ADDRESS         0x58                              // Address of the MD25
 #define SPEED1              0x00                              // Byte to send speed to both motors for forward and backwards motion if operated in MODE 2 or 3 and Motor 1 Speed if in MODE 0 or 1
@@ -18,6 +19,7 @@
 #define servo_pin 9
 #define led_pin 13
 #define led_battery_pin 8
+#define button_pin 12
 
 float Pp = 0.6;
 float Pi = 0;
@@ -34,6 +36,7 @@ LED led_battery(led_battery_pin);
 MD25 md(0);
 Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
 Servo servo;
+Button button(button_pin);
 
 void setup() {
   Serial.begin(9600); // start serial commuication
@@ -53,6 +56,7 @@ void setup() {
 void loop() {
   // FINAL CODE
   int period = 500;
+  while (!button.state());
   driver.forward(428); // -> 12
   led.blink(period);
   driver.forward(356); // -> 11
@@ -62,6 +66,7 @@ void loop() {
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.forward(180); // -> 9
+  while (!button.state());
   led.blink(period);
   driver.turnAtSpot(140);
   driver.forward(625); // -> 8
@@ -78,7 +83,7 @@ void loop() {
   driver.turnAtSpot(90);
   driver.forward(660); // -> 4
   led.blink(period);
-  driver.turnAtSpot(-970);
+  driver.turnAtSpot(-90);
   driver.turn(260, 90, 'L'); // -> 3
   led.blink(period);
   driver.turnAtSpot(90);
