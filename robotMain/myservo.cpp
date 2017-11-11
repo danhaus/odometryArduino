@@ -1,0 +1,40 @@
+/* This library was created by Daniel Hausner in Nov 2017 for odometry assignment
+ * at University of Southampton
+ * dh4n16@soton.ac.uk
+ */
+
+
+#include "myservo.h" //include the declaration for this class
+#include <Servo.h>
+
+
+MyServo::MyServo(byte pin){ // constructor
+	_pin = pin; // set pin
+	pinMode(_pin, OUTPUT); //make _pin an OUTPUT
+	servo = new Servo;
+	servo->attach(_pin);
+	cur_angle = 0;
+	servo->write(0);
+}
+
+void MyServo::setPosition (int position, int del) {
+	int target_angle;
+	switch (position) {
+		case 1: target_angle = 31;
+      break;
+		case 2: target_angle = 62;
+      break;
+		case 3: target_angle = 96;
+      break;
+		case 4: target_angle = 128;
+      break;
+		case 5: target_angle = 160;
+      break;
+	}
+	for (int pos = cur_angle; pos <= target_angle; pos += 1) {
+		servo->write(pos);
+		delay(50);
+	}
+}
+
+

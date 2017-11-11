@@ -4,8 +4,8 @@
 #include "LED.h"
 #include "MD25.h"
 #include "driver.h"
-#include <Servo.h>
 #include "button.h"
+#include "myservo.h"
 
 #define MD25ADDRESS         0x58                              // Address of the MD25
 #define SPEED1              0x00                              // Byte to send speed to both motors for forward and backwards motion if operated in MODE 2 or 3 and Motor 1 Speed if in MODE 0 or 1
@@ -20,6 +20,7 @@
 #define led_pin 13
 #define led_battery_pin 8
 #define button_pin 12
+#define servo_pin 2
 
 float Pp = 0.6;
 float Pi = 0;
@@ -35,7 +36,7 @@ LED led(led_pin);
 LED led_battery(led_battery_pin);
 MD25 md(0);
 Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
-Servo servo;
+MyServo servo(servo_pin);
 Button button(button_pin);
 
 void setup() {
@@ -45,7 +46,6 @@ void setup() {
   md.encReset(); // reset encoders
 //  md.setSpeed(100, 100);
   delay(200);
-  servo.attach(servo_pin);
   Serial.println("set up done");
   if (md.volts() < 120) {
     led_battery.on();
@@ -58,30 +58,34 @@ void loop() {
   int period = 500;
   while (!button.state());
   driver.forward(428); // -> 12
+  servo.setPosition(1);
   led.blink(period);
   driver.forward(356); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
   driver.turn(180, 270, 'L'); // -> 10
+  servo.setPosition(2);
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.forward(180); // -> 9
-  while (!button.state());
   led.blink(period);
   driver.turnAtSpot(140);
   driver.forward(625); // -> 8
+  servo.setPosition(3);
   led.blink(period);
   driver.turnAtSpot(40);
   driver.forward(400); // -> 7
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 6
+  servo.setPosition(4);
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 5
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(660); // -> 4
+  servo.setPosition(5);
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.turn(260, 90, 'L'); // -> 3
