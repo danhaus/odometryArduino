@@ -17,14 +17,23 @@
 
 #define servo_pin 9
 #define led_pin 13
+#define led_battery_pin 10
+
+float Pp = 0.4;
+float Pi = 0;
+float Pd = 0;
+int circumference = 321; // [mm]
+int wheel_dist = 235; // [mm]
+int limit_correction = 70; // [ms] (min value of 15)
+unsigned int time_period = 50; // [ms]
+int pid_precision = 10; // sum of ten errors for pid [encoder count]
 
 // create objects
 LED led(led_pin);
+LED led_battery(led_battery_pin);
 MD25 md(0);
-Driver driver(5, 0, 1, 100, 200);
+Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
 Servo servo;
-
-int cor = 15;
 
 void setup() {
   Serial.begin(9600); // start serial commuication
@@ -35,28 +44,49 @@ void setup() {
   delay(200);
   servo.attach(servo_pin);
   Serial.println("set up done");
+  if (md.volts() < 13) {
+    led_battery.on();
+    while (true);
+  }
 }
 
 void loop() {
-  driver.calculatePid(10, 1000);
-  driver.printPid();
-  driver.calculatePid(100, 1000);
-  driver.printPid();
-  driver.calculatePid(500, 1000);
-  driver.printPid();
-  driver.calculatePid(900, 1000);
-  driver.printPid();
-  driver.calculatePid(1100, 1000);
-  driver.printPid();
+//  // DEBUGGING PID
+//  int target_value = driver.getEncVal(3000);
+//  int enc_cur = md.encoder1();
+//  Serial.print("target_value: ");
+//  Serial.println(target_value);
+//  Serial.print("enc_cur: ");
+//  Serial.println(enc_cur);
+//  driver.calculatePid(enc_cur, target_value);
+//  driver.printPid();
+//  int enc = md.encoder1();
+//  Serial.println("\n");
+//  delay(500);
+
+  driver.forward(355);
   while(true);
 
 
+// // PID PRINTING
+//  driver.calculatePid(10, 1000);
+//  driver.printPid();
+//  driver.calculatePid(100, 1000);
+//  driver.printPid();
+//  driver.calculatePid(500, 1000);
+//  driver.printPid();
+//  driver.calculatePid(900, 1000);
+//  driver.printPid();
+//  driver.calculatePid(1100, 1000);
+//  driver.printPid();
+//  while(true);
 
 
 
-  
+
+
+//// FIRST TEST
 //  int t = 0;
-////  Serial.println("reading encoder 1");
 //  led.blink(400);
 //  do{
 //    md.setSpeed(0+cor, 0+cor);
@@ -78,10 +108,11 @@ void loop() {
 //  Serial.print("encoder1: ");
 //  Serial.print(encodeVal1, DEC);
 //  Serial.print("\t");
-////  Serial.println("reading encoder 2");
 //  int encodeVal2 = md.encoder2();
 //  Serial.print("encoder2: ");
 //  Serial.println(encodeVal2, DEC);
 //  delay(3000);
-//  md.encodeReset();
+//  md.encReset();
+
+
 }

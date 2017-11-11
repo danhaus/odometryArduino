@@ -50,7 +50,7 @@ void MD25::forward(int speed, int encoderCount=360) { // 360 is one revolution
 		Wire.write(SPEED1);
 		Wire.write(speed);
 		Wire.endTransmission();
-	} while(encoder1() < encoderCount);
+	} while(abs(encoder1()) < abs(encoderCount));
 	stopMotors();
 }
 
@@ -131,5 +131,16 @@ int MD25::volts() { // Function to read battery volts as a single byte
 	int batteryVolts = Wire.read();
 
 	return (batteryVolts); // sum of ten readings
+}
+
+void MD25::printEnc() {
+	int encodeVal1 = encoder1();
+	Serial.print("encoder1: ");
+	Serial.print(encodeVal1, DEC);
+	Serial.print("\t");
+	int encodeVal2 = encoder2();
+	Serial.print("encoder2: ");
+	Serial.println(encodeVal2, DEC);
+	Serial.println();
 }
 

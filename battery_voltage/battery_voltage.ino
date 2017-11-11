@@ -4,6 +4,7 @@
 
 
 #include "MD25.h"
+#include "LED.h"
 
 #define MD25ADDRESS         0x58                              // Address of the MD25
 #define SPEED1              0x00                              // Byte to send speed to both motors for forward and backwards motion if operated in MODE 2 or 3 and Motor 1 Speed if in MODE 0 or 1
@@ -16,6 +17,7 @@
 
 // create objects
 MD25 md(0);
+LED led(10);
 
 int cor = 15;
 
@@ -30,4 +32,10 @@ void loop() {
   Serial.print("battery voltage (sum of 10 readings): ");
   Serial.println(md.volts());
   delay(1000);
+  if (md.volts() < 120) {
+    led.on();
+  }
+  else {
+    led.off();
+  }
 }

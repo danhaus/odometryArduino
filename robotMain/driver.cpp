@@ -21,10 +21,95 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, 
 	md = new MD25(0); // 0 is for mode 0 of MD25 and code is writ
 	period = time_period;
 	pid_prec = pid_precision;
+	counter = 0; // counter for forward()
+	cumulated_error = 0; // cumulated error for terminating the forward()
+	pi = 3.14159;
 }
 
+void Driver::forward(int dist) {
+	md->encReset(); // reset encoders
+	do {
+		int enc_target = getEncVal(dist); // get target value for encoders
+		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
+		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
+		md->setSpeed(PID_speed_limited, PID_speed_limited);
+	} while(true);
+}
+
+void Driver::turnAtSpot(int angle) {
+	md->encReset(); // reset encoders
+	int arc = int((float(angle)/360) * (pi*w_dist));
+	int dist = arc;
+	do {
+		int enc_target = getEncVal(dist); // get target value for encoders
+		int enc1 = md->encoder1();
+		calculatePid(enc1, enc_target);
+		int spd1 = PID_speed_limited;
+		int spd2 = abs(PID_speed_limited - 128);
+		md->setSpeed(spd1, spd2);
+	} while(true);
+}
+
+void Driver::turn(int rad, int angle, char side) {
+	float arc_portion = (float(angle)/360);
+	int arc = int ((float(rad) + (float(w_dist)/2)) * arc_portion); // length of outer arc
+	float speed_ratio = float(rad) - (float(w_dist)/2) / (float(rad) + float(w_dist)/2);
+	int dist = arc;
+	int spd1, spd2;
+	do {
+		if (side == 'L') {
+			int enc_target = getEncVal(dist); // get target value for encoders
+			int enc = md->encoder2();
+			calculatePid(enc, enc_target);
+			spd1 = round((PID_speed_limited) * speed_ratio);
+			spd2 = PID_speed_limited;
+		}
+		else {
+			int enc_target = getEncVal(dist); // get target value for encoders
+			int enc = md->encoder1();
+			calculatePid(enc, enc_target);
+			spd1 = PID_speed_limited;
+			spd2 = round((PID_speed_limited) * speed_ratio);
+		}
+		md->setSpeed(spd1, spd2);
+	} while(true);
+}
+
+void Driver::printPid() {
+	Serial.print("error: ");
+	Serial.println(error);
+	Serial.print("P: ");
+	Serial.println(P);
+	Serial.print("I: ");
+	Serial.println(I);
+	Serial.print("D: ");
+	Serial.println(D);
+	Serial.print("PID_val: ");
+	Serial.println(PID_val);
+	Serial.print("PID_speed_theor: ");
+	Serial.println(PID_speed_theor);
+	Serial.print("PID_speed_limited: ");
+	Serial.println(PID_speed_limited);
+	Serial.println();
+}
+
+void Driver::printEnc() {
+	int encodeVal1 = md->encoder1();
+	Serial.print("encoder1: ");
+	Serial.print(encodeVal1, DEC);
+	Serial.print("\t");
+	int encodeVal2 = md->encoder2();
+	Serial.print("encoder2: ");
+	Serial.println(encodeVal2, DEC);
+	Serial.println();
+}
+
+
+
+// HELP FUNCTIONS
+
 int Driver::getEncVal(int dist) { // returns encoder value to be set to drive required distance
-	int enc_count = ((dist/cir) * 360);
+	int enc_count = int(((float(dist)/cir) * 360));
 	return enc_count;
 }
 
@@ -43,52 +128,11 @@ void Driver::calculatePid(int enc_val_cur, int target_val) {
 	P = error; // proportional
 	I = I + error; // integral
 	D = error - previous_error; // derivative
-	PID_val = ((Kp*P) + (Ki*I) + (Kd*D))/100; // not sure about the sign after 128
-	PID_speed_theor = 128 +  PID_val;
+	PID_val = (Kp*P) + (Ki*I) + (Kd*D); // not sure about the sign after 128
+	PID_speed_theor = 128 + int(PID_val);
 	PID_speed_limited = getSpeed(PID_speed_theor);
+	previous_error = error;
 }
-
-void Driver::forward(int dist) {
-	md->encReset(); // reset encoders
-	int cumulated_error = 0;
-	int counter = 0;
-	do {
-		int enc_target = getEncVal(dist); // get target value for encoders
-		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
-		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
-		md->setSpeed(PID_speed_limited, PID_speed_limited);
-		if (readingPeriod()) {
-			cumulated_error += error;
-			counter++;
-			if (counter >= 10) {
-				if (cumulated_error < pid_prec) {
-					break;
-				}
-				else {
-					counter = 0;
-					cumulated_error = 0;
-				}
-			}
-		}
-	} while(false);
-}
-
-void Driver::printPid() {
-	Serial.print("error: ");
-	Serial.println(error);
-	Serial.print("P: ");
-	Serial.println(P);
-	Serial.print("I: ");
-	Serial.println(I);
-	Serial.print("D: ");
-	Serial.println(D);
-	Serial.print("PID_speed_theor: ");
-	Serial.println(PID_speed_theor);
-	Serial.print("PID_speed_limited: ");
-	Serial.println(PID_speed_limited);
-	Serial.println();
-}
-
 bool Driver::readingPeriod() {
 	cur_time = millis();
 	if (cur_time > (prev_time + period)) {
@@ -97,4 +141,21 @@ bool Driver::readingPeriod() {
 	}
 	return false;
 }
+
+bool Driver::terminatePid() {
+	cumulated_error += error;
+	counter++;
+	if (counter >= 10) {
+		if (cumulated_error < pid_prec) {
+			return true;
+		}
+		else {
+			counter = 0;
+			cumulated_error = 0;
+		}
+	}
+	return false;	 
+}
+
+// 
 
