@@ -20,6 +20,7 @@ public:
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void forward(int dist); // drives forward using PID and functions above
+	void turnAtSpot(int angle); // turns at spot until it reaches required angle (positive anti-clockwise)
 	void printPid(); // prints current PID values and error
 	void printEnc(); // prints current ecoder values
 
@@ -30,6 +31,7 @@ public:
 	void calculatePid(int enc_val_cur, int target_val); // calculates PID values
 	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
 	bool terminatePid(); // help function for terminating pid
+	float pi;
 
 private:
 	float Kp;

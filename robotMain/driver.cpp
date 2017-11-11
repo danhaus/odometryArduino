@@ -23,6 +23,7 @@ Driver::Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, 
 	pid_prec = pid_precision;
 	counter = 0; // counter for forward()
 	cumulated_error = 0; // cumulated error for terminating the forward()
+	pi = 3.14159;
 }
 
 void Driver::forward(int dist) {
@@ -32,6 +33,19 @@ void Driver::forward(int dist) {
 		int enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
 		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
 		md->setSpeed(PID_speed_limited, PID_speed_limited);
+	} while(true);
+}
+
+void Driver::turnAtSpot(int angle) {
+	md->encReset(); // reset encoders
+	int dist = int((float(angle)/360) * (pi*wheel_dist));
+	do {
+		int enc_target = getEncVal(dist); // get target value for encoders
+		int enc1 = md->encoder1();
+		calculatePid(enc1, enc_target);
+		int spd1 = PID_speed_limited;
+		int spd2 = abs(PID_speed_limited - 128);
+		md->setSpeed(spd1, spd2);
 	} while(true);
 }
 
