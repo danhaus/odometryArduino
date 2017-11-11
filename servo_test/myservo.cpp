@@ -18,33 +18,26 @@ MyServo::MyServo(byte pin){ // constructor
 
 void MyServo::attach() {
 	servo->attach(_pin);
-  delay(50);
-  servo->write(0);
 }
 
-void MyServo::setPosition (int pos, int del) {
+void MyServo::setPosition (int position, int del) {
 	int target_angle;
-	switch (pos) {
+	switch (position) {
 		case 1: target_angle = 31;
-       break;
+      // break;
 		case 2: target_angle = 62;
-       break;
+      // break;
 		case 3: target_angle = 96;
-       break;
+      // break;
 		case 4: target_angle = 128;
-       break;
+      // break;
 		case 5: target_angle = 160;
-       break;
+      // break;
 	}
-	for (temp_pos = cur_angle; temp_pos <= target_angle; temp_pos += 1) {
-		servo->write(temp_pos);
+	for (int pos = cur_angle; pos <= target_angle; pos += 1) {
+		servo->write(pos);
 		delay(50);
-//    Serial.print("pos: ");
-//    Serial.println(pos);
-//    Serial.print("cur_pos: ");
-//    Serial.println(pos);
 	}
-  cur_angle = temp_pos;
 }
 
 

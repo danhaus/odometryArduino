@@ -45,6 +45,7 @@ void setup() {
 //  led.blink(1000);
   md.encReset(); // reset encoders
 //  md.setSpeed(100, 100);
+  servo.attach();
   delay(200);
   Serial.println("set up done");
   if (md.volts() < 120) {
