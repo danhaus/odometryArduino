@@ -24,7 +24,7 @@ void LED::off(){
 //blink the LED in a period equal to paramterer time.
 void LED::blink(int time){
 	on(); 			//turn LED on
-	delay(time/2);  //wait half of the wanted period
+	delay(time);  //wait half of the wanted period
 	off();			//turn LED off
-	delay(time/2);  //wait the last half of the wanted period
+//	delay(time/2);  //wait the last half of the wanted period
 }

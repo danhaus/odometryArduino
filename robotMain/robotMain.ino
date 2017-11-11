@@ -17,13 +17,13 @@
 
 #define servo_pin 9
 #define led_pin 13
-#define led_battery_pin 10
+#define led_battery_pin 8
 
-float Pp = 0.4;
+float Pp = 0.6;
 float Pi = 0;
 float Pd = 0;
 int circumference = 321; // [mm]
-int wheel_dist = 235; // [mm]
+int wheel_dist = 233; // [mm] initialy 235
 int limit_correction = 70; // [ms] (min value of 15)
 unsigned int time_period = 50; // [ms]
 int pid_precision = 10; // sum of ten errors for pid [encoder count]
@@ -44,13 +44,55 @@ void setup() {
   delay(200);
   servo.attach(servo_pin);
   Serial.println("set up done");
-  if (md.volts() < 13) {
+  if (md.volts() < 120) {
     led_battery.on();
     while (true);
   }
 }
 
 void loop() {
+  // FINAL CODE
+  int period = 500;
+  driver.forward(428); // -> 12
+  led.blink(period);
+  driver.forward(356); // -> 11
+  driver.turnAtSpot(142.6);
+  led.blink(period);
+  driver.turn(180, 270, 'L'); // -> 10
+  led.blink(period);
+  driver.turnAtSpot(-90);
+  driver.forward(180); // -> 9
+  led.blink(period);
+  driver.turnAtSpot(140);
+  driver.forward(625); // -> 8
+  led.blink(period);
+  driver.turnAtSpot(40);
+  driver.forward(400); // -> 7
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(400); // -> 6
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(400); // -> 5
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(660); // -> 4
+  led.blink(period);
+  driver.turnAtSpot(-970);
+  driver.turn(260, 90, 'L'); // -> 3
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(500); // -> 2
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(260); // -> 1
+  led.blink(period);
+  while(true);
+
+
+
+
+  
 //  // DEBUGGING PID
 //  int target_value = driver.getEncVal(3000);
 //  int enc_cur = md.encoder1();
@@ -63,9 +105,6 @@ void loop() {
 //  int enc = md.encoder1();
 //  Serial.println("\n");
 //  delay(500);
-
-  driver.forward(355);
-  while(true);
 
 
 // // PID PRINTING

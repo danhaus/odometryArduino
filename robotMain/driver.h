@@ -16,11 +16,11 @@
 
 class Driver {
 public:
-	Driver(float Pp, float Pi, float Pd, int circumference, int wheel_dist, int limit_correction, unsigned int time_period, int pid_precision); // constructor
+	Driver(float Pp, float Pi, float Pd, int circumference, float wheel_dist, int limit_correction, unsigned int time_period, int pid_precision); // constructor
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void forward(int dist); // drives forward using PID and functions above
-	void turnAtSpot(int angle); // turns at spot until it reaches required angle (positive anti-clockwise)
+	void turnAtSpot(float angle); // turns at spot until it reaches required angle (positive clockwise)
 	void turn(int rad, int angle, char side);
 	void printPid(); // prints current PID values and error
 	void printEnc(); // prints current ecoder values
@@ -48,7 +48,7 @@ private:
 	int PID_speed_theor; // PID_speed = 128 + PID_val (automatically asigned in calculatePID())
 	int PID_speed_limited; // limited PID speed so that the motor does not exceeds min and max speeds, performed by getSpeed(..)
 	int cir; // circumference of the wheel [mm]
-	int w_dist; // distance between wheels [mm]
+	float w_dist; // distance between wheels [mm]
 	MD25* md;
 	unsigned long cur_time;
 	unsigned long prev_time;
