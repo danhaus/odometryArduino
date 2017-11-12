@@ -47,7 +47,7 @@ void Driver::forward(int dist, long timeout) {
 //		Serial.print("enc1: ");
 //		Serial.println(enc1);
 //		Serial.println();
-	} while((abs(enc1) + 1 < abs(enc_target)) && ((millis() - start_time) < timeout));
+	} while((abs(enc1) < abs(enc_target)) && ((millis() - start_time) < timeout));
 //	} while(true);
 //  md->stopMotors();
 }

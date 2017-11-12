@@ -62,7 +62,8 @@ void loop() {
 //  driver.turnAtSpot(-45);
 //  led.blink(500);
 //  driver.forward(400);
-  while(!button.state());
+//  led.blink(1000);
+//  while(!button.state());
 
   
   // FINAL CODE
@@ -73,7 +74,7 @@ void loop() {
   driver.forward(360); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
-  driver.turn(180, 270, 'L'); // -> 10
+  driver.turn(180, 270, 'L'); // -> 10      270 degs
   while(!button.state());
 //  servo.setPosition(2);
 //  while(!button.state());
