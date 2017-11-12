@@ -22,10 +22,10 @@
 #define button_pin 12
 #define servo_pin 2
 
-float Pp = 0.45; // 0.3
+float Pp = 0.5; // 0.5
 float Pi = 0;
 float Pd = 0;
-float Pp_t = 0.55; // 0.3
+float Pp_t = 0.6; // 0.6
 float Pi_t = 0;
 float Pd_t = 0;
 
@@ -54,64 +54,65 @@ void setup() {
     led_battery.on();
     while (true);
   }
-//  while(!button.state());
+  while(!button.state());
 }
 
 void loop() {
 // FINDING PID CONSTANTS
-//  driver.turnAtSpot(-45);
+//  driver.turnAtSpot(90);
 //  led.blink(500);
-  driver.forward(500);
-  led.blink(1000);
-  while(!button.state());
+//  driver.forward(300);
+//  led.blink(500);
+//  while(!button.state());
 
   
   // FINAL CODE
-//  int period = 500;
-//  driver.forward(428); // -> 12
-////  servo.setPosition(1);
-//  led.blink(period);
-//  driver.forward(360); // -> 11
-//  driver.turnAtSpot(142.6);
-//  led.blink(period);
-//  driver.turn(180, 270, 'L'); // -> 10      270 degs
+  int period = 500;
+  driver.forward(428); // -> 12
+//  servo.setPosition(1);
+  led.blink(period);
+  driver.forward(360); // -> 11
+  driver.turnAtSpot(142.6);
+  led.blink(period);
+  driver.turn(180, 270, 'L'); // -> 10      270 degs
+  while(!button.state());
+//  servo.setPosition(2);
 //  while(!button.state());
-////  servo.setPosition(2);
-////  while(!button.state());
-//  led.blink(period);
-//  driver.turnAtSpot(-90);
-//  driver.forward(180); // -> 9
-//  led.blink(period);
-//  driver.turnAtSpot(140);
-//  driver.forward(620); // -> 8
-////  servo.setPosition(3);
-//  led.blink(period);
-//  driver.turnAtSpot(40);
-//  driver.forward(400); // -> 7
-//  led.blink(period);
-//  driver.turnAtSpot(90);
-//  driver.forward(400); // -> 6
-////  servo.setPosition(4);
-//  led.blink(period);
-//  driver.turnAtSpot(90);
-//  driver.forward(400); // -> 5
-//  led.blink(period);
-//  driver.turnAtSpot(90);
-//  driver.forward(660); // -> 4
-////  servo.setPosition(5);
-//  led.blink(period);
-//  driver.turnAtSpot(-90);
-//  driver.turn(260, 90, 'L'); // -> 3
-//  led.blink(period);
-//  driver.turnAtSpot(90);
-//  driver.forward(500); // -> 2
-//  led.blink(period);
-//  driver.turnAtSpot(90);
-//  driver.forward(260); // -> 1
-//  led.blink(period);
-//  driver.turnAtSpot(-90);
-//  driver.forward(340); // -> finish
-//  while(true);
+  led.blink(period);
+  driver.turnAtSpot(-90);
+  driver.forward(180); // -> 9
+  led.blink(period);
+  driver.turnAtSpot(140);
+  driver.forward(620); // -> 8
+//  servo.setPosition(3);
+  led.blink(period);
+  driver.turnAtSpot(40);
+  driver.forward(400); // -> 7
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(400); // -> 6
+//  servo.setPosition(4);
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(400); // -> 5
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(660); // -> 4
+//  servo.setPosition(5);
+  led.blink(period);
+  driver.turnAtSpot(-90);
+  driver.turn(260, 90, 'L'); // -> 3
+  while(!button.state());
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(500); // -> 2
+  led.blink(period);
+  driver.turnAtSpot(90);
+  driver.forward(260); // -> 1
+  led.blink(period);
+  driver.turnAtSpot(-90);
+  driver.forward(340); // -> finish
+  while(true);
 
 
 

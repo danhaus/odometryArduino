@@ -108,7 +108,7 @@ long MD25::encoder1() { // Function to read value of encoder 1 as a long
 	poss1 += Wire.read(); // Third byte for encoder 1, LH
 	poss1 <<= 8;
 	poss1 +=Wire.read(); // Fourth byte for encoder 1, LL
-
+  delay(5);
 	return(poss1);
 }
 
@@ -126,7 +126,7 @@ long MD25::encoder2() { // Function to read value of encoder 2 as a long
 	poss2 += Wire.read();
 	poss2 <<= 8;
 	poss2 +=Wire.read();
-
+  delay(5);
 	return(poss2);
 }
 

@@ -204,14 +204,15 @@ bool Driver::readingPeriod() {
 
 bool Driver::terminatePid() {
 	error_sum += abs(error);
-	counter++;
-	if (counter >= 10) {
-		if (error_sum <= 10) {
+	counter += 1;
+	if (counter >= 20) {
+		if (error_sum <= 20) {
 			return true;
 		}
 		else {
 			counter = 0;
 			error_sum = 0;
+      return false;
 		}
 	}
 	return false;	 
