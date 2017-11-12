@@ -22,16 +22,18 @@
 #define button_pin 12
 #define servo_pin 2
 
-float Pp = 0.5;
+float Pp = 0.2; // 0.3
 float Pi = 0;
 float Pd = 0;
-float Pp_t = 0.5;
+float Pp_t = 0.5; // 0.3
 float Pi_t = 0;
 float Pd_t = 0;
-int limit_correction = 15; // [ms] (min value of 15)
-int limit_correction_turning = 50;
+
+int limit_correction = 90; // [ms] (min value of 15)
+int limit_correction_turning = 100;
+
 int circumference = 321; // [mm]
-int wheel_dist = 234; // [mm] initialy 235
+int wheel_dist = 230; // [mm] initialy 235
 
 // create objects
 LED led(led_pin);
@@ -44,10 +46,10 @@ Button button(button_pin);
 void setup() {
   Serial.begin(9600); // start serial commuication
   driver.setup();
-  servo.attach();
-  delay(200);
+//  servo.attach();
+  delay(100);
   Serial.println("set up done");
-  led.blink(500);
+  led.blink(200);
   if (md.volts() < 120) {
     led_battery.on();
     while (true);
@@ -56,37 +58,49 @@ void setup() {
 }
 
 void loop() {
+// FINDING PID CONSTANTS
+//  driver.turnAtSpot(360*10, 1000);
+//  led.blink(500);
+////  driver.forward(500);
+//  while(!button.state());
+
+  
   // FINAL CODE
   int period = 500;
   driver.forward(428); // -> 12
-  servo.setPosition(1);
+//  servo.setPosition(1);
   led.blink(period);
-  driver.forward(356); // -> 11
+  driver.forward(360); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
+  while(button.state()) {
+    led.blink(500);
+    delay(500);
+  }
   driver.turn(180, 270, 'L'); // -> 10
-  servo.setPosition(2);
+//  servo.setPosition(2);
+//  while(!button.state());
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.forward(180); // -> 9
   led.blink(period);
   driver.turnAtSpot(140);
-  driver.forward(625); // -> 8
-  servo.setPosition(3);
+  driver.forward(620); // -> 8
+//  servo.setPosition(3);
   led.blink(period);
-  driver.turnAtSpot(40);
+  driver.turnAtSpot(50);
   driver.forward(400); // -> 7
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 6
-  servo.setPosition(4);
+//  servo.setPosition(4);
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 5
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(660); // -> 4
-  servo.setPosition(5);
+//  servo.setPosition(5);
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.turn(260, 90, 'L'); // -> 3
@@ -97,15 +111,11 @@ void loop() {
   driver.turnAtSpot(90);
   driver.forward(260); // -> 1
   led.blink(period);
+  driver.turnAtSpot(-90);
+  driver.forward(340); // -> finish
   while(true);
 
 
-// FINDING PID CONSTANTS
-//  while(!button.state());
-
-//  driver.forward(500);
-//  driver.turnAtSpot(90);
-//  while(!button.state());
 
 
 
