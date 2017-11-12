@@ -19,12 +19,13 @@ MyServo::MyServo(byte pin){ // constructor
 void MyServo::attach() {
 	servo->attach(_pin);
   delay(50);
-  servo->write(0);
 }
 
 void MyServo::setPosition (int pos, int del) {
 	int target_angle;
 	switch (pos) {
+    case 0: target_angle = 5;
+       break;
 		case 1: target_angle = 31;
        break;
 		case 2: target_angle = 62;

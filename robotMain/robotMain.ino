@@ -46,7 +46,8 @@ Button button(button_pin);
 void setup() {
   Serial.begin(9600); // start serial commuication
   driver.setup();
-//  servo.attach();
+  servo.attach();
+  servo.setPosition(0);
   delay(100);
   Serial.println("set up done");
   led.blink(200);
@@ -69,42 +70,43 @@ void loop() {
   // FINAL CODE
   int period = 500;
   driver.forward(428); // -> 12
-//  servo.setPosition(1);
+  servo.setPosition(1);
   led.blink(period);
   driver.forward(360); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
-  driver.turn(180, 270, 'L'); // -> 10      270 degs
-  while(!button.state());
-//  servo.setPosition(2);
+  driver.turn(212, 288, 'L'); // -> 10      270 degs
+  servo.setPosition(2);
 //  while(!button.state());
   led.blink(period);
-  driver.turnAtSpot(-90);
+  driver.turnAtSpot(-70);
+//  while(!button.state());
   driver.forward(180); // -> 9
   led.blink(period);
   driver.turnAtSpot(140);
   driver.forward(620); // -> 8
-//  servo.setPosition(3);
+  servo.setPosition(3);
   led.blink(period);
   driver.turnAtSpot(40);
   driver.forward(400); // -> 7
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 6
-//  servo.setPosition(4);
+  servo.setPosition(4);
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 5
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(660); // -> 4
-//  servo.setPosition(5);
+  servo.setPosition(5);
   led.blink(period);
   driver.turnAtSpot(-90);
-  driver.turn(260, 90, 'L'); // -> 3
-  while(!button.state());
+  driver.turn(220, 90, 'L'); // -> 3
+  driver.forward(75);
   led.blink(period);
-  driver.turnAtSpot(90);
+//  while(!button.state());
+  driver.turnAtSpot(92);
   driver.forward(500); // -> 2
   led.blink(period);
   driver.turnAtSpot(90);

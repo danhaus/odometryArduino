@@ -23,8 +23,6 @@ void setup() {
 }
 
 void loop() {
-  servo.setPosition(1);
+  servo.setPosition(0);
   delay(1000);
-  servo.setPosition(5);
-
 }

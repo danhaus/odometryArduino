@@ -62,7 +62,7 @@ private:
 	unsigned int period;
 	int pid_prec; // if sum of 10 encoder reading is smaller than pid_prec, forward(..) terminates
 	int counter;
-	int error_sum;
+	long error_sum;
 };
 
 #endif

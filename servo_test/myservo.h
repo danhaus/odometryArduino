@@ -13,11 +13,11 @@ class MyServo {
 public:
 	MyServo(byte pin); // constructor
   void attach();
-	void setPosition(int angle, int del=50);
+	void setPosition(int pos, int del=10);
 private:
 	byte _pin;
 	Servo* servo;
-	int cur_angle;
+	int cur_angle, temp_pos;
 };
 
 #endif

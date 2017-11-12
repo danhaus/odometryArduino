@@ -84,10 +84,10 @@ void Driver::turn(int rad, int angle, char side, long timeout) {
 	md->encReset();
 	delay(10);
 	float arc_portion = (float(angle)/360);
-	int arc = int (((float(rad) + (w_dist/2)) )*arc_portion*2*pi); // length of outer arc
+	int arc = round((((float(rad) + (w_dist/2)) )*arc_portion*2*pi)); // length of outer arc
 	float speed_ratio = (float(rad) - (w_dist/2)) / (float(rad) + w_dist/2);
 	int dist = arc;
-	int spd1, spd2, enc, enc_target;
+	int spd1, spd2, enc, enc_target = 0;
 	counter, error_sum = 0;
 	long start_time = millis();
 	do {
@@ -95,7 +95,7 @@ void Driver::turn(int rad, int angle, char side, long timeout) {
 			enc_target = getEncVal(dist); // get target value for encoders
 			enc = md->encoder2();
 			calculatePid(enc, enc_target);
-			spd1 = round((PID_speed_limited - 128) * speed_ratio) + 128;
+			spd1 = round(float(PID_speed_limited - 128) * speed_ratio) + 128;
 			spd2 = PID_speed_limited;
 		}
 		else {
@@ -103,9 +103,11 @@ void Driver::turn(int rad, int angle, char side, long timeout) {
 			enc = md->encoder1();
 			calculatePid(enc, enc_target);
 			spd1 = PID_speed_limited;
-			spd2 = round((PID_speed_limited - 128) * speed_ratio) + 128;
+			spd2 = round(float(PID_speed_limited - 128) * speed_ratio) + 128;
 		}
-		if (terminatePid()) {
+    bool t = terminatePid();
+    Serial.println(t);
+		if (t) {
 			break;
 		}
 		md->setSpeed(spd1, spd2);
