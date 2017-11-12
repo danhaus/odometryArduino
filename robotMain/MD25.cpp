@@ -23,8 +23,9 @@ have to be cast as a byte to stop them being misinterperted as NULL */
 #define MODE_SELECTOR 0xF // Byte to change between control MODES
 #define ACCELERATION 0xE // Byte to define motor acceleration
 
-MD25::MD25(int mode) { // consturctor, mode of MD25 operation
+MD25::MD25(int mode, int acceleration) { // consturctor, mode of MD25 operation
 	_mode = mode;
+  _acceleration = acceleration;
 }
 
 void MD25::setup() {
@@ -36,11 +37,13 @@ void MD25::setup() {
 	Wire.write(MODE_SELECTOR);
 	Wire.write(_mode);                                           
 	Wire.endTransmission();
+  delay(100);
 
-  Wire.beginTransmission(MD25ADDRESS); // Set MD25 operation MODE
-  Wire.write(ACCELERATION);
-  Wire.write(1);                                           
-  Wire.endTransmission();
+	Wire.beginTransmission(MD25ADDRESS); // Set MD25 operation MODE
+	Wire.write(ACCELERATION);
+	Wire.write(_acceleration);                                           
+	Wire.endTransmission();
+  delay(100);
 
 	encReset(); // Cals a function that resets the encoder values to 0 
 }

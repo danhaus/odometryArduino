@@ -14,7 +14,7 @@
 
 class MD25 {
 public:
-	MD25(int mode); // constructor, mode is used to setup MD25 in setup()
+	MD25(int mode, int acceleration=5); // constructor, mode is 0-2 and acceleration 1-10
 	void setup(); // setups I2C and mode of MD22
 	void forward(int speed, int encoderCount); /* drives both motors forward with set speed until encoders
 	do not reach the specified number of pulses (360 pulese per revolution), then it stops */
@@ -28,6 +28,7 @@ public:
 	void printEnc(); // reads and prints encoder values
 private:
 	int _mode;
+  int _acceleration;
 };
 
 #endif

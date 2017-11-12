@@ -43,13 +43,11 @@ Button button(button_pin);
 
 void setup() {
   Serial.begin(9600); // start serial commuication
-  md.setup();
-//  led.blink(1000);
-  md.encReset(); // reset encoders
-//  md.setSpeed(100, 100);
+  driver.setup();
   servo.attach();
   delay(200);
   Serial.println("set up done");
+  led.blink(500);
   if (md.volts() < 120) {
     led_battery.on();
     while (true);
