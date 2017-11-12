@@ -22,15 +22,15 @@
 #define button_pin 12
 #define servo_pin 2
 
-float Pp = 0.2; // 0.3
+float Pp = 0.3; // 0.3
 float Pi = 0;
 float Pd = 0;
-float Pp_t = 0.5; // 0.3
+float Pp_t = 0.55; // 0.3
 float Pi_t = 0;
 float Pd_t = 0;
 
-int limit_correction = 90; // [ms] (min value of 15)
-int limit_correction_turning = 100;
+int limit_correction = 70; // [ms] (min value of 15)
+int limit_correction_turning = 90;
 
 int circumference = 321; // [mm]
 int wheel_dist = 230; // [mm] initialy 235
@@ -59,10 +59,10 @@ void setup() {
 
 void loop() {
 // FINDING PID CONSTANTS
-//  driver.turnAtSpot(360*10, 1000);
+//  driver.turnAtSpot(-45);
 //  led.blink(500);
-////  driver.forward(500);
-//  while(!button.state());
+//  driver.forward(400);
+  while(!button.state());
 
   
   // FINAL CODE
@@ -73,11 +73,8 @@ void loop() {
   driver.forward(360); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
-  while(button.state()) {
-    led.blink(500);
-    delay(500);
-  }
   driver.turn(180, 270, 'L'); // -> 10
+  while(!button.state());
 //  servo.setPosition(2);
 //  while(!button.state());
   led.blink(period);
@@ -88,7 +85,7 @@ void loop() {
   driver.forward(620); // -> 8
 //  servo.setPosition(3);
   led.blink(period);
-  driver.turnAtSpot(50);
+  driver.turnAtSpot(40);
   driver.forward(400); // -> 7
   led.blink(period);
   driver.turnAtSpot(90);
