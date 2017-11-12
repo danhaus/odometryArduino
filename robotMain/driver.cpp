@@ -9,18 +9,20 @@
 #include "MD25.h"
 
 
-Driver::Driver(float Pp, float Pi, float Pd, int circumference, float wheel_dist, int limit_correction, unsigned int time_period, int pid_precision) { // constructor, PID constants
+Driver::Driver(float Pp, float Pi, float Pd, float Pp_t, float Pi_t, float Pd_t, int limit_correction, int limit_correction_turning, int circumference, float wheel_dist) { // constructor, PID constants
 	Kp = Pp;
 	Ki = Pi;
 	Kd = Pd;
+	Kp_t = Pp_t;
+	Ki_t = Pi_t;
+	Kd_t = Pd_t;
 	cir = circumference;
 	w_dist = wheel_dist;
 	limit_cor = limit_correction;
+	limit_cor_turn = limit_correction_turning;
 	error = 0;
 	previous_error = 0;
 	md = new MD25(0); // 0 is for mode 0 of MD25 and code is writ
-	period = time_period;
-	pid_prec = pid_precision;
 	counter = 0; // counter for forward()
 	cumulated_error = 0; // cumulated error for terminating the forward()
 	pi = 3.14159;
@@ -43,6 +45,7 @@ void Driver::forward(int dist) {
 		Serial.println(millis());
 		Serial.println();
 	} while(abs(enc1) + 1 < abs(enc_target));
+//	} while(true);
 }
 
 void Driver::turnAtSpot(float angle) {
@@ -54,7 +57,7 @@ void Driver::turnAtSpot(float angle) {
 	do {
 		enc_target = getEncVal(dist); // get target value for encoders
 		enc1 = md->encoder1();
-		calculatePid(enc1, enc_target);
+		calculatePidTurn(enc1, enc_target);
 		int spd1 = PID_speed_limited;
 		int spd2 = 128 - (spd1 - 128);
 		md->setSpeed(spd1, spd2);
@@ -136,6 +139,16 @@ int Driver::getSpeed(int speed) {
 	return speed;
 }
 
+int Driver::getSpeedTurn(int speed) {
+	if (speed >= 255 - limit_cor_turn) {
+		return (255 - limit_cor_turn);
+	}
+	if (speed <= 0 + limit_cor_turn) {
+		return (0 + limit_cor_turn);
+	}
+	return speed;
+}
+
 void Driver::calculatePid(int enc_val_cur, int target_val) {
 	error = target_val - enc_val_cur;
 	P = error; // proportional
@@ -146,6 +159,18 @@ void Driver::calculatePid(int enc_val_cur, int target_val) {
 	PID_speed_limited = getSpeed(PID_speed_theor);
 	previous_error = error;
 }
+
+void Driver::calculatePidTurn(int enc_val_cur, int target_val) {
+	error = target_val - enc_val_cur;
+	P = error; // proportional
+	I = I + error; // integral
+	D = error - previous_error; // derivative
+	PID_val = (Kp_t*P) + (Ki_t*I) + (Kd_t*D); // not sure about the sign after 128
+	PID_speed_theor = 128 + int(PID_val);
+	PID_speed_limited = getSpeedTurn(PID_speed_theor);
+	previous_error = error;
+}
+
 bool Driver::readingPeriod() {
 	cur_time = millis();
 	if (cur_time > (prev_time + period)) {

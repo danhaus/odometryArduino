@@ -21,6 +21,7 @@ have to be cast as a byte to stop them being misinterperted as NULL */
 #define VOLTREAD 0x0A // Byte to read battery volts
 #define RESETENCODERS 0x20
 #define MODE_SELECTOR 0xF // Byte to change between control MODES
+#define ACCELERATION 0xE // Byte to define motor acceleration
 
 MD25::MD25(int mode) { // consturctor, mode of MD25 operation
 	_mode = mode;
@@ -35,6 +36,11 @@ void MD25::setup() {
 	Wire.write(MODE_SELECTOR);
 	Wire.write(_mode);                                           
 	Wire.endTransmission();
+
+  Wire.beginTransmission(MD25ADDRESS); // Set MD25 operation MODE
+  Wire.write(ACCELERATION);
+  Wire.write(1);                                           
+  Wire.endTransmission();
 
 	encReset(); // Cals a function that resets the encoder values to 0 
 }

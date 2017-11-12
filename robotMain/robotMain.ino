@@ -22,20 +22,22 @@
 #define button_pin 12
 #define servo_pin 2
 
-float Pp = 0.6;
+float Pp = 0.5;
 float Pi = 0;
 float Pd = 0;
+float Pp_t = 0.5;
+float Pi_t = 0;
+float Pd_t = 0;
+int limit_correction = 15; // [ms] (min value of 15)
+int limit_correction_turning = 50;
 int circumference = 321; // [mm]
-int wheel_dist = 233; // [mm] initialy 235
-int limit_correction = 70; // [ms] (min value of 15)
-unsigned int time_period = 50; // [ms]
-int pid_precision = 10; // sum of ten errors for pid [encoder count]
+int wheel_dist = 234; // [mm] initialy 235
 
 // create objects
 LED led(led_pin);
 LED led_battery(led_battery_pin);
 MD25 md(0);
-Driver driver(Pp, Pi, Pd, circumference, wheel_dist, limit_correction, time_period, pid_precision);
+Driver driver(Pp, Pi, Pd, Pp_t, Pi_t, Pd_t, limit_correction, limit_correction_turning, circumference, wheel_dist);
 MyServo servo(servo_pin);
 Button button(button_pin);
 
@@ -52,12 +54,12 @@ void setup() {
     led_battery.on();
     while (true);
   }
+  while(!button.state());
 }
 
 void loop() {
   // FINAL CODE
   int period = 500;
-  while (!button.state());
   driver.forward(428); // -> 12
   servo.setPosition(1);
   led.blink(period);
@@ -100,11 +102,18 @@ void loop() {
   while(true);
 
 
+// FINDING PID CONSTANTS
+//  while(!button.state());
+
+//  driver.forward(500);
+//  driver.turnAtSpot(90);
+//  while(!button.state());
+
 
 
   
 //  // DEBUGGING PID
-//  int target_value = driver.getEncVal(3000);
+//  int target_value = driver.getEncVal(500);
 //  int enc_cur = md.encoder1();
 //  Serial.print("target_value: ");
 //  Serial.println(target_value);

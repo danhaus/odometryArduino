@@ -16,7 +16,7 @@
 
 class Driver {
 public:
-	Driver(float Pp, float Pi, float Pd, int circumference, float wheel_dist, int limit_correction, unsigned int time_period, int pid_precision); // constructor
+	Driver(float Pp, float Pi, float Pd, float Pp_t, float Pi_t, float Pd_t, int limit_correction, int limit_correction_turning, int circumference, float wheel_dist); // constructor
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void forward(int dist); // drives forward using PID and functions above
@@ -29,7 +29,9 @@ public:
 	int getEncVal(int dist);
 	int getSpeed(int speed); /* inputs speed from pid, if it is outside the limit
 	[0+limit_correction, 255-limit_correction], returns the limit value, otherwise it returns the speed */
+	int getSpeedTurn(int speed);
 	void calculatePid(int enc_val_cur, int target_val); // calculates PID values
+	void calculatePidTurn(int enc_val_cur, int target_val); // calculates PID values
 	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
 	bool terminatePid(); // help function for terminating pid
 	float pi;
@@ -38,7 +40,11 @@ private:
 	float Kp;
 	float Ki;
 	float Kd;
+	float Kp_t;
+	float Ki_t;
+	float Kd_t;
 	int limit_cor;
+  	int limit_cor_turn;
 	int error; // error for PID (encoder count)
 	int previous_error;
 	int P; // proportional error for PID
