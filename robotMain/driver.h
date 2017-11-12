@@ -20,7 +20,7 @@ public:
 	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
 	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
 	void setup(); // calls setup from md25.h to start the serial communication, set acceleration and reset encoders
-	void forward(int dist, long timeout=5000); // drives forward using PID and functions above
+	void forward(int dist, long timeout=10000); // drives forward using PID and functions above
 	void turnAtSpot(float angle, long timeout=2000); // turns at spot until it reaches required angle (positive clockwise)
 	void turn(int rad, int angle, char side, long timeout=5000);
 	void printPid(); // prints current PID values and error
@@ -62,7 +62,7 @@ private:
 	unsigned int period;
 	int pid_prec; // if sum of 10 encoder reading is smaller than pid_prec, forward(..) terminates
 	int counter;
-	int cumulated_error;
+	int error_sum;
 };
 
 #endif

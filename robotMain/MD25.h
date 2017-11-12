@@ -28,7 +28,9 @@ public:
 	void printEnc(); // reads and prints encoder values
 private:
 	int _mode;
-  int _acceleration;
+	int _acceleration;
+	int counter;
+	int error_sum;
 };
 
 #endif

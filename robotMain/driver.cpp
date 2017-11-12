@@ -24,8 +24,10 @@ Driver::Driver(float Pp, float Pi, float Pd, float Pp_t, float Pi_t, float Pd_t,
 	previous_error = 0;
 	md = new MD25(0, 2); // parametres: mode, accelration (ints 1-10)
 	counter = 0; // counter for forward()
-	cumulated_error = 0; // cumulated error for terminating the forward()
+	error_sum = 0; // cumulated error for terminating the forward()
 	pi = 3.14159;
+	counter = 0;
+	error_sum = 0;
 }
 
 void Driver::setup() {
@@ -36,20 +38,24 @@ void Driver::forward(int dist, long timeout) {
 	md->encReset(); // reset encoders
 	delay(10);
 	int enc1, enc_target;
+	counter, error_sum = 0;
 	long start_time = millis();
 	do {
 		enc_target = getEncVal(dist); // get target value for encoders
 		enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
 		calculatePid(enc1, enc_target); // calculate PID value and assign it to private var PID_speed_limited
 		md->setSpeed(PID_speed_limited, PID_speed_limited);
+		if (terminatePid()) {
+			break;
+		}
 //		Serial.print("enc_target: ");
 //		Serial.println(enc_target);
 //		Serial.print("enc1: ");
 //		Serial.println(enc1);
 //		Serial.println();
-	} while((abs(enc1) < abs(enc_target)) && ((millis() - start_time) < timeout));
+	} while((millis() - start_time) < timeout);
 //	} while(true);
-//  md->stopMotors();
+	md->stopMotors();
 }
 
 void Driver::turnAtSpot(float angle, long timeout) {
@@ -58,9 +64,8 @@ void Driver::turnAtSpot(float angle, long timeout) {
 	int arc = int((angle/360) * (pi*w_dist));
 	int dist = arc;
 	int enc1, enc_target = 0;
+	counter, error_sum = 0;
 	long start_time = millis();
-  Serial.println(start_time);
-  Serial.println();
 	do {
 		enc_target = getEncVal(dist); // get target value for encoders
 		enc1 = md->encoder1();
@@ -68,8 +73,11 @@ void Driver::turnAtSpot(float angle, long timeout) {
 		int spd1 = PID_speed_limited;
 		int spd2 = 128 - (spd1 - 128);
 		md->setSpeed(spd1, spd2);
-	} while((abs(enc1) < abs(enc_target)) && ((millis() - start_time) < timeout));
-//  md->stopMotors();
+		if (terminatePid()) {
+			break;
+		}
+	} while((millis() - start_time) < timeout);
+	md->stopMotors();
 }
 
 void Driver::turn(int rad, int angle, char side, long timeout) {
@@ -80,6 +88,7 @@ void Driver::turn(int rad, int angle, char side, long timeout) {
 	float speed_ratio = (float(rad) - (w_dist/2)) / (float(rad) + w_dist/2);
 	int dist = arc;
 	int spd1, spd2, enc, enc_target;
+	counter, error_sum = 0;
 	long start_time = millis();
 	do {
 		if (side == 'L') {
@@ -96,8 +105,11 @@ void Driver::turn(int rad, int angle, char side, long timeout) {
 			spd1 = PID_speed_limited;
 			spd2 = round((PID_speed_limited - 128) * speed_ratio) + 128;
 		}
+		if (terminatePid()) {
+			break;
+		}
 		md->setSpeed(spd1, spd2);
-	} while((abs(enc) + 1 < abs(enc_target)) && ((millis() - start_time) < timeout));
+	} while((millis() - start_time) < timeout);
 // md->stopMotors();
 }
 
@@ -191,15 +203,15 @@ bool Driver::readingPeriod() {
 }
 
 bool Driver::terminatePid() {
-	cumulated_error += error;
+	error_sum += abs(error);
 	counter++;
 	if (counter >= 10) {
-		if (cumulated_error < pid_prec) {
+		if (error_sum <= 10) {
 			return true;
 		}
 		else {
 			counter = 0;
-			cumulated_error = 0;
+			error_sum = 0;
 		}
 	}
 	return false;	 

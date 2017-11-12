@@ -38,7 +38,7 @@ void MyServo::setPosition (int pos, int del) {
 	}
 	for (temp_pos = cur_angle; temp_pos <= target_angle; temp_pos += 1) {
 		servo->write(temp_pos);
-		delay(50);
+		delay(del);
 //    Serial.print("pos: ");
 //    Serial.println(pos);
 //    Serial.print("cur_pos: ");
