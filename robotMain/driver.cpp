@@ -28,10 +28,11 @@ Driver::Driver(float Pp, float Pi, float Pd, float Pp_t, float Pi_t, float Pd_t,
 	pi = 3.14159;
 }
 
-void Driver::forward(int dist) {
+void Driver::forward(int dist, int timeout) {
 	md->encReset(); // reset encoders
 	delay(10);
 	int enc1, enc_target;
+	int start_time = millis();
 	do {
 		enc_target = getEncVal(dist); // get target value for encoders
 		enc1 = md->encoder1(); // asign current value of encoder1 to var enc1
@@ -44,16 +45,17 @@ void Driver::forward(int dist) {
 		Serial.print("time: ");
 		Serial.println(millis());
 		Serial.println();
-	} while(abs(enc1) + 1 < abs(enc_target));
+	} while((abs(enc1) + 1 < abs(enc_target)) || ((millis() - start_time) < timeout));
 //	} while(true);
 }
 
-void Driver::turnAtSpot(float angle) {
+void Driver::turnAtSpot(float angle, int timeout) {
 	md->encReset(); // reset encoders
 	delay(10);
 	int arc = int((angle/360) * (pi*w_dist));
 	int dist = arc;
 	int enc1, enc_target = 0;
+	int start_time = millis();
 	do {
 		enc_target = getEncVal(dist); // get target value for encoders
 		enc1 = md->encoder1();
@@ -61,10 +63,10 @@ void Driver::turnAtSpot(float angle) {
 		int spd1 = PID_speed_limited;
 		int spd2 = 128 - (spd1 - 128);
 		md->setSpeed(spd1, spd2);
-	} while(abs(enc1) + 1 < abs(enc_target));
+	} while((abs(enc1) + 1 < abs(enc_target)) || ((millis() - start_time) < timeout));
 }
 
-void Driver::turn(int rad, int angle, char side) {
+void Driver::turn(int rad, int angle, char side, int timeout) {
 	md->encReset();
 	delay(10);
 	float arc_portion = (float(angle)/360);
@@ -72,6 +74,7 @@ void Driver::turn(int rad, int angle, char side) {
 	float speed_ratio = (float(rad) - (w_dist/2)) / (float(rad) + w_dist/2);
 	int dist = arc;
 	int spd1, spd2, enc, enc_target;
+	int start_time = millis();
 	do {
 		if (side == 'L') {
 			enc_target = getEncVal(dist); // get target value for encoders
@@ -88,7 +91,7 @@ void Driver::turn(int rad, int angle, char side) {
 			spd2 = round((PID_speed_limited - 128) * speed_ratio) + 128;
 		}
 		md->setSpeed(spd1, spd2);
-	} while(abs(enc) + 1 < abs(enc_target));
+	} while((abs(enc) + 1 < abs(enc_target)) || ((millis() - start_time) < timeout));
 }
 
 void Driver::printPid() {
