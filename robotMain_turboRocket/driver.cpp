@@ -22,7 +22,7 @@ Driver::Driver(float Pp, float Pi, float Pd, float Pp_t, float Pi_t, float Pd_t,
 	limit_cor_turn = limit_correction_turning;
 	error = 0;
 	previous_error = 0;
-	md = new MD25(0, 2); // parametres: mode, accelration (ints 1-10)
+	md = new MD25(0, 4); // parametres: mode, accelration (ints 1-10)
 	counter = 0; // counter for forward()
 	error_sum = 0; // cumulated error for terminating the forward()
 	pi = 3.14159;

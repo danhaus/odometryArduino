@@ -24,13 +24,13 @@
 
 float Pp = 0.5; // 0.5
 float Pi = 0;
-float Pd = 0;
-float Pp_t = 0.6; // 0.6
+float Pd = 4; // 2
+float Pp_t = 0.65; // 0.65
 float Pi_t = 0;
-float Pd_t = 0;
+float Pd_t = 2; // 2
 
-int limit_correction = 70; // [ms] (min value of 15)
-int limit_correction_turning = 90;
+int limit_correction = 15; // [ms] (min value of 15)
+int limit_correction_turning = 30;
 
 int circumference = 321; // [mm]
 int wheel_dist = 230; // [mm] initialy 235
@@ -60,9 +60,9 @@ void setup() {
 
 void loop() {
 // FINDING PID CONSTANTS
-//  driver.turnAtSpot(90);
+//  driver.turnAtSpot(-270);
 //  led.blink(500);
-//  driver.forward(300);
+//  driver.forward(500);
 //  led.blink(500);
 //  while(!button.state());
 
