@@ -1,7 +1,8 @@
 /* This library was created by Daniel Hausner in Nov 2017 for odometry assignment
- * at University of Southampton
+ * at University of Southampton. It eases interaction with LEDs.
  * dh4n16@soton.ac.uk
  */
+
 
 #ifndef LED_H
 #define LED_H

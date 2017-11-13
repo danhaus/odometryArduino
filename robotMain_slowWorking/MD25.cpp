@@ -1,5 +1,5 @@
-/* This library was created by Daniel Hausner in Nov 2017 for odometry assignment
- * at University of Southampton
+/* This library was created by Daniel Hausner in Nov 2017 for odometry assignment with help of university-provided documents.
+ * at University of Southampton. It eases ineraction with MD25 motor driver with EMG30 motors.
  * dh4n16@soton.ac.uk
  */
 

@@ -1,6 +1,6 @@
-/* This library was created by Daniel Hausner in Nov 2017 for odometry assignment
+/* This library was created by Taiwo Tony Khourie and debugged with help of Georgios Hadjigeorgiou in Nov 2017 for odometry assignment
  * at University of Southampton
- * dh4n16@soton.ac.uk
+ * ttk1g16@soton.ac.uk
  */
 
 #ifndef MyServo_H
@@ -13,7 +13,7 @@ class MyServo {
 public:
 	MyServo(byte pin); // constructor
   void attach();
-	void setPosition(int pos, int del=20);
+	void setPosition(int pos, int del=50); // sets position with set delay which is applied between every angle
 private:
 	byte _pin;
 	Servo* servo;

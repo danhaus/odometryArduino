@@ -1,11 +1,13 @@
-/* This code..
- * 
+/* This is a high level code for the odometry assignment at University of Southamampton, Nov 2017. It was written by Daniel Hausner and debugged with a help of team members,
+ * namely Georgios Hadjigeorgiou, Taiwo Tony Khourie, Shadi Hamou and Bethany Harding.
+ * dh4n16@soton.ac.uk
  */
 #include "LED.h"
 #include "MD25.h"
 #include "driver.h"
 #include "button.h"
 #include "myservo.h"
+#include "song.h"
 
 #define MD25ADDRESS         0x58                              // Address of the MD25
 #define SPEED1              0x00                              // Byte to send speed to both motors for forward and backwards motion if operated in MODE 2 or 3 and Motor 1 Speed if in MODE 0 or 1
@@ -42,6 +44,7 @@ MD25 md(0);
 Driver driver(Pp, Pi, Pd, Pp_t, Pi_t, Pd_t, limit_correction, limit_correction_turning, circumference, wheel_dist);
 MyServo servo(servo_pin);
 Button button(button_pin);
+Song song(9);
 
 void setup() {
   Serial.begin(9600); // start serial commuication
@@ -70,50 +73,59 @@ void loop() {
   // FINAL CODE
   int period = 500;
   driver.forward(428); // -> 12
-  servo.setPosition(1);
   led.blink(period);
   driver.forward(360); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
   driver.turn(212, 288, 'L'); // -> 10      270 degs
-  servo.setPosition(2);
-//  while(!button.state());
+  servo.setPosition(1);
   led.blink(period);
   driver.turnAtSpot(-70);
 //  while(!button.state());
   driver.forward(180); // -> 9
   led.blink(period);
+//  while(!button.state());
   driver.turnAtSpot(140);
   driver.forward(620); // -> 8
-  servo.setPosition(3);
+  servo.setPosition(2);
   led.blink(period);
   driver.turnAtSpot(40);
   driver.forward(400); // -> 7
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 6
-  servo.setPosition(4);
+  servo.setPosition(3);
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(400); // -> 5
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(660); // -> 4
-  servo.setPosition(5);
+  servo.setPosition(4);
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.turn(220, 90, 'L'); // -> 3
-  driver.forward(75);
+  driver.forward(70);
   led.blink(period);
 //  while(!button.state());
-  driver.turnAtSpot(92);
+  driver.turnAtSpot(93);
   driver.forward(500); // -> 2
+  servo.setPosition(5);
   led.blink(period);
   driver.turnAtSpot(90);
   driver.forward(260); // -> 1
   led.blink(period);
   driver.turnAtSpot(-90);
   driver.forward(340); // -> finish
+
+  // BE HAPPY
+  for (int i = 0; i < 3; i++) {
+    led.blink(400);
+    led_battery.blink(400);
+    delay(400);
+  }
+  driver.turnAtSpot(360);
+  song.singSongAndBeHappy();
   while(true);
 
 

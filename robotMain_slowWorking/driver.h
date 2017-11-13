@@ -1,10 +1,12 @@
-/* This library was created by Daniel Hausner in Nov 2017 for odometry assignment
- * at University of Southampton
+/* This library for Arduino was created by Daniel Hausner and debugged with a help of Taiwo Khourie, George Hadjigeorgioua
+ * Shadi Hamou and Bethany Harding in Nov 2017 for odometry assignment at University of Southampton.
+ * It eases interaction with MD25 driver.
  * dh4n16@soton.ac.uk
  */
 
 /*	10*circumference = 3213 mm
 	distance between wheels = 235 mm
+	for our robot
 */
 
 #ifndef Driver_H
@@ -17,28 +19,30 @@
 class Driver {
 public:
 	Driver(float Pp, float Pi, float Pd, float Pp_t, float Pi_t, float Pd_t, int limit_correction, int limit_correction_turning, int circumference, float wheel_dist); // constructor
-	/* Pp, Pi, Pd: PID constants, circumference of the wheel [mm], wheel_dist[mm]: distance between the wheels, limit_correction: speed correction so that it does not reach max power,
-	time_period[ms]: period in between readings of error for terminating PID, pid_precision: sum of 10 erros for terminating driving function */
+	/* Pp, Pi, Pd, Pp_t, Pi_t, Pd_t: PID constants, limit_correction and limit_correction_turing: limits max speed of the motors for going straight and turning at spot respectively,
+	 * circumference: circumference of the wheel, wheel_dist: distance between the wheels */
 	void setup(); // calls setup from md25.h to start the serial communication, set acceleration and reset encoders
-	void forward(int dist, long timeout=10000); // drives forward using PID and functions above
-	void turnAtSpot(float angle, long timeout=10000); // turns at spot until it reaches required angle (positive clockwise)
-	void turn(int rad, int angle, char side, long timeout=10000);
+	void forward(int dist, long timeout=5000); // drives forward using PID and help functions below
+	void turnAtSpot(float angle, long timeout=5000); // turns at spot until it reaches required angle (positive clockwise) using PID and help functions
+	void turn(int rad, int angle, char side, long timeout=5000); // drives on arc with specified parametres
+
+	// DEBUG FUCNTIONS
 	void printPid(); // prints current PID values and error
 	void printEnc(); // prints current ecoder values
 
 	// HELP FUNCTIONS
-	int getEncVal(int dist);
-	int getSpeed(int speed); /* inputs speed from pid, if it is outside the limit
+	int getEncVal(int dist); // returns encoder count for the required distance
+	int getSpeed(int speed); /* inputs speed from PID; if it is outside the limit
 	[0+limit_correction, 255-limit_correction], returns the limit value, otherwise it returns the speed */
-	int getSpeedTurn(int speed);
+	int getSpeedTurn(int speed); // the same as above, but with variables for turning at spot
 	void calculatePid(int enc_val_cur, int target_val); // calculates PID values
-	void calculatePidTurn(int enc_val_cur, int target_val); // calculates PID values
+	void calculatePidTurn(int enc_val_cur, int target_val); // calculates PID values for turning at spot
 	bool readingPeriod(); // returns true if time elapsed between current time and previous time is larger than period
 	bool terminatePid(); // help function for terminating pid
 	float pi;
 
 private:
-	float Kp;
+	float Kp; // constants for PID
 	float Ki;
 	float Kd;
 	float Kp_t;
