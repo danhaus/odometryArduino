@@ -24,13 +24,13 @@
 
 float Pp = 0.5; // 0.5
 float Pi = 0;
-float Pd = 4; // 2
-float Pp_t = 0.65; // 0.65
+float Pd = 0.5; // 2
+float Pp_t = 0.8; // 0.8
 float Pi_t = 0;
-float Pd_t = 2; // 2
+float Pd_t = 0.5; // 0.5
 
-int limit_correction = 15; // [ms] (min value of 15)
-int limit_correction_turning = 30;
+int limit_correction = 40; // [ms] (min value of 15)
+int limit_correction_turning = 60;
 
 int circumference = 321; // [mm]
 int wheel_dist = 230; // [mm] initialy 235
@@ -60,9 +60,9 @@ void setup() {
 
 void loop() {
 // FINDING PID CONSTANTS
-//  driver.turnAtSpot(-270);
+//  driver.turnAtSpot(270);
 //  led.blink(500);
-//  driver.forward(500);
+//  driver.forward(600);
 //  led.blink(500);
 //  while(!button.state());
 
@@ -75,11 +75,11 @@ void loop() {
   driver.forward(360); // -> 11
   driver.turnAtSpot(142.6);
   led.blink(period);
-  driver.turn(212, 288, 'L'); // -> 10      270 degs
+  driver.turn(180, 270, 'L'); // -> 10      270 degs
   servo.setPosition(2);
-//  while(!button.state());
+  while(!button.state());
   led.blink(period);
-  driver.turnAtSpot(-70);
+  driver.turnAtSpot(-90);
 //  while(!button.state());
   driver.forward(180); // -> 9
   led.blink(period);
@@ -102,11 +102,10 @@ void loop() {
   servo.setPosition(5);
   led.blink(period);
   driver.turnAtSpot(-90);
-  driver.turn(220, 90, 'L'); // -> 3
-  driver.forward(75);
+  driver.turn(260, 90, 'L'); // -> 3
   led.blink(period);
-//  while(!button.state());
-  driver.turnAtSpot(92);
+  while(!button.state());
+  driver.turnAtSpot(90);
   driver.forward(500); // -> 2
   led.blink(period);
   driver.turnAtSpot(90);
