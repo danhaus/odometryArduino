@@ -31,7 +31,7 @@ float Pp_t = 0.6; // 0.6
 float Pi_t = 0;
 float Pd_t = 0;
 
-int limit_correction = 70; // [ms] (min value of 15)
+int limit_correction = 70; // (min value of 15)
 int limit_correction_turning = 90;
 
 int circumference = 321; // [mm]
@@ -48,17 +48,17 @@ Song song(9);
 
 void setup() {
   Serial.begin(9600); // start serial commuication
-  driver.setup();
-  servo.attach();
-  servo.setPosition(0);
+  driver.setup(); // start I2C, setup MD25 to mode 0
+  servo.attach(); // attach servo
+  servo.setPosition(0); // zero postion for servo
   delay(100);
   Serial.println("set up done");
-  led.blink(200);
-  if (md.volts() < 120) {
+  led.blink(200); // indicate that setup is done
+  if (md.volts() < 120) { // red LED if battery voltage is under 12 V, does not continue execution
     led_battery.on();
     while (true);
   }
-  while(!button.state());
+  while(!button.state()); // button for start
 }
 
 void loop() {
@@ -70,8 +70,8 @@ void loop() {
 //  while(!button.state());
 
   
-  // FINAL CODE
-  int period = 500;
+  // FINAL CODE - navigation instruction
+  int period = 500; // period for blink
   driver.forward(428); // -> 12
   led.blink(period);
   driver.forward(360); // -> 11
@@ -120,9 +120,9 @@ void loop() {
 
   // BE HAPPY
   for (int i = 0; i < 3; i++) {
-    led.blink(400);
-    led_battery.blink(400);
-    delay(400);
+    led.blink(200);
+    led_battery.blink(200);
+    delay(200);
   }
   driver.turnAtSpot(360);
   song.singSongAndBeHappy();
